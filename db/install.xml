@@ -32,7 +32,7 @@
                 <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
                 <FIELD NAME="subjectid" TYPE="int" LENGTH="10" NOTNULL="true"/>
                 <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true"/>
-                <FIELD NAME="status" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="-"/>
+                <FIELD NAME="status" TYPE="int" LENGTH="1" NOTNULL="false"/>
             </FIELDS>
             <KEYS>
                 <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
