@@ -15,29 +15,51 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 require_once('../../config.php');
+
 $cmid = required_param('id', PARAM_INT);
 $cm = get_coursemodule_from_id('subjectattendance', $cmid, 0, false, MUST_EXIST);
 $context = context_module::instance($cm->id);
 require_course_login($cm->course, true, $cm);
 require_capability('mod/subjectattendance:mark', $context);
-$attendance = $DB->get_record('subjectattendance', ['id' => $cm->instance], MUST_EXIST);
-$subjects = $DB->get_records('subjectattendance_subjects', ['attendanceid' => $attendance->id]);
-$students = get_enrolled_users($context, 'mod/subjectattendance:view', 0, 'u.id,u.firstname,u.lastname');
+
+$attendance = $DB->get_record('subjectattendance', ['id' => $cm->instance], '*', MUST_EXIST);
+
+// получаем предметы с полями id и name
+$subjects = $DB->get_records('subjectattendance_subjects', ['attendanceid' => $attendance->id], 'id ASC', '*');
+
+// проверяем, что есть хотя бы один предмет
+if (!$subjects) {
+    throw new moodle_exception('nosubjects', 'subjectattendance');
+}
+
+$students = get_enrolled_users($context, 'mod/subjectattendance:view');
+
 header('Content-Type: text/csv; charset=utf-8');
 header('Content-Disposition: attachment; filename="subjectattendance_' . $attendance->id . '.csv"');
+echo "\xEF\xBB\xBF"; // BOM для Excel
+
 $fp = fopen('php://output', 'w');
-$header = array_merge(['Student ID', 'Student name'], array_map(function ($s) {
-    return $s->name;
-}, $subjects));
+
+// заголовки
+$header = array_merge(['Student ID', 'Student name'], array_map(fn($s) => $s->name, $subjects));
 fputcsv($fp, $header);
+
+// строки студентов
 foreach ($students as $student) {
     $row = [$student->id, fullname($student)];
     foreach ($subjects as $subject) {
-        $existing = $DB->get_record('subjectattendance_log', ['subjectid' => $subject->id, 'userid' => $student->id]);
-        $status = $existing ? $existing->status : 0;
+        if (!isset($subject->id)) {
+            continue; // пропускаем некорректные записи
+        }
+        $existing = $DB->get_record('subjectattendance_log', [
+            'subjectid' => $subject->id,
+            'userid'    => $student->id,
+        ]);
+        $status = ($existing && isset($existing->status)) ? $existing->status : '-';
         $row[] = $status;
     }
     fputcsv($fp, $row);
 }
+
 fclose($fp);
 exit;

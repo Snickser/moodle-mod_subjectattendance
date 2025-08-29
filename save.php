@@ -1,4 +1,19 @@
 <?php
+// This file is part of Moodle - https://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
+
 require_once('../../config.php');
 
 require_login();
@@ -9,11 +24,11 @@ $attendanceid = required_param('attendanceid', PARAM_INT);
 $cmid         = required_param('cmid', PARAM_INT);
 
 // получаем "сырые" данные из POST
-$status_raw = $_POST['status'] ?? [];
+$statusraw = $_POST['status'] ?? [];
 $status = [];
 
 // безопасная очистка двумерного массива
-foreach ($status_raw as $userid => $subjects) {
+foreach ($statusraw as $userid => $subjects) {
     $userid = clean_param($userid, PARAM_INT);
     foreach ($subjects as $subjectid => $value) {
         $subjectid = clean_param($subjectid, PARAM_INT);
@@ -38,7 +53,6 @@ $allowedgroupids = array_keys($allowedgroups);
 
 // сохраняем данные
 foreach ($status as $userid => $subjects) {
-
     // если пользователь не админ, проверяем группы студента
     if (!$accessallgroups) {
         $studentgroups = groups_get_all_groups($courseid, $userid);
@@ -62,7 +76,7 @@ foreach ($status as $userid => $subjects) {
                 'subjectid'    => $subjectid,
                 'status'       => $value, // null для "-"
                 'timecreated'  => time(),
-                'timemodified' => time()
+                'timemodified' => time(),
             ]);
         }
     }

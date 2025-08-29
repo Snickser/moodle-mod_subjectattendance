@@ -1,7 +1,18 @@
 <?php
 // This file is part of Moodle - https://moodle.org/
+//
 // Moodle is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License.
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 function subjectattendance_supports($feature) {
     switch ($feature) {
@@ -25,7 +36,7 @@ function subjectattendance_add_instance($data, $mform = null) {
             if ($line !== '') {
                 $DB->insert_record('subjectattendance_subjects', (object)[
                     'attendanceid' => $id,
-                    'name' => $line
+                    'name' => $line,
                 ]);
             }
         }
@@ -63,7 +74,7 @@ function subjectattendance_update_instance($data, $mform = null) {
             // новый предмет
             $newsubjectids[] = $DB->insert_record('subjectattendance_subjects', (object)[
                 'attendanceid' => $data->id,
-                'name' => $line
+                'name' => $line,
             ]);
         }
     }
@@ -87,7 +98,7 @@ function subjectattendance_delete_instance($id) {
 
     // Удаляем все логи для этих предметов
     if ($subjectids) {
-        list($insql, $params) = $DB->get_in_or_equal($subjectids, SQL_PARAMS_NAMED);
+        [$insql, $params] = $DB->get_in_or_equal($subjectids, SQL_PARAMS_NAMED);
         $DB->delete_records_select('subjectattendance_log', "subjectid $insql", $params);
     }
 

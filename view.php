@@ -1,4 +1,19 @@
 <?php
+// This file is part of Moodle - https://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
+
 require_once('../../config.php');
 
 $id = required_param('id', PARAM_INT); // course module id
@@ -14,7 +29,7 @@ require_capability('mod/subjectattendance:view', $context);
 
 $PAGE->set_context($context);
 $PAGE->set_url('/mod/subjectattendance/view.php', ['id' => $cm->id]);
-$PAGE->set_title($course->shortname.': '.$attendance->name);
+$PAGE->set_title($course->shortname . ': ' . $attendance->name);
 $PAGE->set_heading($course->fullname);
 
 echo $OUTPUT->header();
@@ -40,7 +55,7 @@ if ($allgroups) {
         $groupoptions[$gid] = $g->name;
     }
     echo '<form method="get">';
-    echo '<input type="hidden" name="id" value="'.$cm->id.'">';
+    echo '<input type="hidden" name="id" value="' . $cm->id . '">';
     echo html_writer::select($groupoptions, 'group', $selectedgroup, false, ['onchange' => 'this.form.submit();']);
     echo '</form><br>';
 }
@@ -77,7 +92,7 @@ foreach ($students as $student) {
     foreach ($subjects as $subject) {
         $log = $DB->get_record('subjectattendance_log', [
             'subjectid' => $subject->id,
-            'userid'    => $student->id
+            'userid'    => $student->id,
         ]);
 
         $status = $log ? $log->status : null; // null = '-'
@@ -87,7 +102,7 @@ foreach ($students as $student) {
         $class = 'attendance-select';
         if ($status === 1) {
             $class .= ' present';
-        } elseif ($status === 0) {
+        } else if ($status === 0) {
             $class .= ' absent';
         } else {
             $class .= ' none';
@@ -95,9 +110,9 @@ foreach ($students as $student) {
 
         // селект с тремя вариантами
         $options = [
-            ''  => '',  // null
+            ''  => '', // null
             0   => '✖',
-            1   => '✔'
+            1   => '✔',
         ];
 
         $row[] = html_writer::select($options, $name, $status === null ? '' : (string)$status, null, ['class' => $class]);
@@ -132,5 +147,7 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 </script>';
+
+echo '<br><p><a href="export.php?id=' . $cm->id . '">Export CSV</a></p>';
 
 echo $OUTPUT->footer();
