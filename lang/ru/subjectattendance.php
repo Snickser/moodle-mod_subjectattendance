@@ -16,7 +16,7 @@
 
 $string['modulename'] = 'Посещаемость по предметам';
 $string['modulenameplural'] = 'Посещаемости по предметам';
-$string['modulename_help'] = 'Модуль для отметки посещаемости по заранее заданным предметам/темам, без привязки к времени.';
+$string['modulename_help'] = 'Модуль для отметки посещаемости по заранее заданным предметам/темам.';
 $string['subjectattendance:addinstance'] = 'Добавить модуль Посещаемость по предметам';
 $string['subjectattendance:mark'] = 'Отмечать посещаемость по предметам';
 $string['subjectattendance:view'] = 'Просматривать посещаемость по предметам';
@@ -27,3 +27,6 @@ $string['absent'] = 'Отсутствовал';
 $string['excused'] = 'Уважительная причина';
 $string['save'] = 'Сохранить';
 $string['saved'] = 'Сохранено.';
+$string['subjectslist'] = 'Предметы (по одному на строку)';
+$string['pluginadministration'] = '';
+$string['allgroups'] = 'Все группы';

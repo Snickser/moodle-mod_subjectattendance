@@ -26,8 +26,26 @@ foreach ($status_raw as $userid => $subjects) {
     }
 }
 
+// получаем cmid для текущего модуля
+$cm = get_coursemodule_from_instance('subjectattendance', $attendanceid, 0, false, MUST_EXIST);
+$context = context_module::instance($cm->id);
+$courseid = $cm->course;
+
+// получаем группы, которые может редактировать текущий пользователь
+$allowedgroups = groups_get_all_groups($courseid, $USER->id);
+$allowedgroupids = array_keys($allowedgroups);
+
 // обработка сохранения в БД
 foreach ($status as $userid => $subjects) {
+
+    // проверяем, что студент находится в одной из доступных групп
+    $studentgroups = groups_get_all_groups($courseid, $userid);
+    $studentgroupids = array_keys($studentgroups);
+
+    if (empty(array_intersect($allowedgroupids, $studentgroupids))) {
+        continue; // студент не в вашей группе — пропускаем
+    }
+
     foreach ($subjects as $subjectid => $value) {
         $log = $DB->get_record('subjectattendance_log', [
             'userid'    => $userid,
@@ -49,9 +67,6 @@ foreach ($status as $userid => $subjects) {
         }
     }
 }
-
-// получаем правильный cmid для редиректа
-$cm = get_coursemodule_from_instance('subjectattendance', $attendanceid, 0, false, MUST_EXIST);
 
 // редирект на страницу модуля с уведомлением
 redirect(

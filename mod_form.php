@@ -27,17 +27,18 @@ class mod_subjectattendance_mod_form extends moodleform_mod {
         $mform->setType('name', PARAM_TEXT);
         $mform->addRule('name', null, 'required', null, 'client');
 
-        $this->add_intro_editor();
+        // устаревшее: $this->add_intro_editor();
+        // новое:
+        $this->standard_intro_elements();
 
-        // атрибуты как массив — надёжнее
+        // textarea для предметов
         $attrs = ['wrap' => 'virtual', 'rows' => 8, 'cols' => 60];
         $mform->addElement('textarea', 'subjectslist', get_string('subjectslist', 'subjectattendance'), $attrs);
-        // сохраняем переносы строк — лучше PARAM_RAW_TRIMMED
         $mform->setType('subjectslist', PARAM_RAW_TRIMMED);
 
-        // при редактировании подгружаем уже существующие предметы в textarea
+        // подгружаем существующие предметы при редактировании
         if (!empty($this->current->instance)) {
-            $subjects = $DB->get_records('subjectattendance_subjects', ['attendanceid' => $this->current->instance], 'id');
+            $subjects = $DB->get_records('subjectattendance_subjects', ['attendanceid' => $this->current->instance], 'id ASC');
             if ($subjects) {
                 $lines = [];
                 foreach ($subjects as $s) {

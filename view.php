@@ -23,30 +23,51 @@ echo $OUTPUT->heading(format_string($attendance->name));
 // получаем список предметов
 $subjects = $DB->get_records('subjectattendance_subjects', ['attendanceid' => $attendance->id], '', 'id, name');
 
-// получаем список студентов
-$students = get_enrolled_users($context, 'mod/subjectattendance:view');
+// --- фильтр по группе ---
+// список всех групп пользователя в курсе
+$allgroups = groups_get_all_groups($course->id, $USER->id);
+$selectedgroup = optional_param('group', 0, PARAM_INT); // 0 = все группы
 
-// добавляем стили для селектов
-echo '<style>
-.attendance-select {
-    width: 60px;
-    font-weight: bold;
-    text-align: center;
-    color: #000;
+// если выбранная группа недоступна — используем текущую группу пользователя
+if ($selectedgroup && !array_key_exists($selectedgroup, $allgroups)) {
+    $selectedgroup = groups_get_course_group($course, true);
 }
+
+// форма выбора группы
+if ($allgroups) {
+    $groupoptions = [0 => get_string('allgroups', 'subjectattendance')];
+    foreach ($allgroups as $gid => $g) {
+        $groupoptions[$gid] = $g->name;
+    }
+    echo '<form method="get">';
+    echo '<input type="hidden" name="id" value="'.$cm->id.'">';
+    echo html_writer::select($groupoptions, 'group', $selectedgroup, false, ['onchange' => 'this.form.submit();']);
+    echo '</form><br>';
+}
+
+// получаем студентов по выбранной группе
+if ($selectedgroup && $selectedgroup != 0) {
+    $students = get_enrolled_users($context, 'mod/subjectattendance:view', $selectedgroup);
+} else {
+    $students = get_enrolled_users($context, 'mod/subjectattendance:view');
+}
+
+// --- стили селектов ---
+echo '<style>
+.attendance-select { width: 60px; font-weight: bold; text-align: center; color: #000; }
 .attendance-select.present { background-color: #c8e6c9; } /* зелёный */
 .attendance-select.absent  { background-color: #ffcdd2; } /* красный */
 .attendance-select.none    { background-color: #fff9c4; } /* жёлтый */
 </style>';
 
-// начинаем форму
+// --- форма для сохранения ---
 echo '<form method="post" action="save.php">';
 echo '<input type="hidden" name="sesskey" value="'.sesskey().'">';
 echo '<input type="hidden" name="attendanceid" value="'.$attendance->id.'">';
 
-// строим таблицу
+// --- строим таблицу ---
 $table = new html_table();
-$table->head = array_merge([get_string('fullname')], array_map(function($s){ return $s->name; }, $subjects));
+$table->head = array_merge([get_string('fullname')], array_map(fn($s) => $s->name, $subjects));
 $table->attributes['class'] = 'generaltable';
 
 foreach ($students as $student) {
@@ -58,58 +79,55 @@ foreach ($students as $student) {
             'userid'    => $student->id
         ]);
 
-$status = $log ? $log->status : null; // null = '-' по умолчанию
-$name = "status[{$student->id}][{$subject->id}]";
+        $status = $log ? $log->status : null; // null = '-'
+        $name = "status[{$student->id}][{$subject->id}]";
 
-// определяем класс
-if ($status === null) {
-    $class = 'attendance-select none';
-} elseif ($status) {
-    $class = 'attendance-select present';
-} else {
-    $class = 'attendance-select absent';
-}
+        // класс по значению
+        $class = 'attendance-select';
+        if ($status === 1) {
+            $class .= ' present';
+        } elseif ($status === 0) {
+            $class .= ' absent';
+        } else {
+            $class .= ' none';
+        }
 
-// селект с тремя вариантами
-$options = [
-    ''  => '',  // по умолчанию
-    0   => '✖',
-    1   => '✔'
-];
+        // селект с тремя вариантами
+        $options = [
+            ''  => '-',  // null
+            0   => '✖',
+            1   => '✔'
+        ];
 
-$row[] = html_writer::select(
-    $options,
-    $name,
-    $status === null ? '' : $status,
-    null,
-    ['class' => $class]
-);
-
+        $row[] = html_writer::select($options, $name, $status === null ? '' : (string)$status, null, ['class' => $class]);
     }
 
     $table->data[] = $row;
-
 }
 
 echo html_writer::table($table);
-
-// кнопка сохранения
 echo '<input type="submit" value="Сохранить" class="btn btn-primary">';
+echo '<input type="hidden" name="cmid" value="<?php echo $cm->id; ?>">';
 echo '</form>';
 
-// JS для динамического изменения цвета при выборе
+// JS для динамической смены цвета
 echo '<script>
 document.addEventListener("DOMContentLoaded", function() {
     document.querySelectorAll(".attendance-select").forEach(function(select) {
+        // установка цвета при загрузке
+        let value = select.value;
+        select.classList.remove("present","absent","none");
+        if (value === "1") select.classList.add("present");
+        else if (value === "0") select.classList.add("absent");
+        else select.classList.add("none");
+
+        // динамическое изменение при выборе
         select.addEventListener("change", function() {
+            let val = this.value;
             this.classList.remove("present","absent","none");
-            if (this.value == "1") {
-                this.classList.add("present");
-            } else if (this.value == "0") {
-                this.classList.add("absent");
-            } else {
-                this.classList.add("none");
-            }
+            if (val === "1") this.classList.add("present");
+            else if (val === "0") this.classList.add("absent");
+            else this.classList.add("none");
         });
     });
 });
