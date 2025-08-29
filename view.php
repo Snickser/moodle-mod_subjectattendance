@@ -61,9 +61,10 @@ echo '<style>
 </style>';
 
 // --- форма для сохранения ---
-echo '<form method="post" action="save.php">';
-echo '<input type="hidden" name="sesskey" value="'.sesskey().'">';
-echo '<input type="hidden" name="attendanceid" value="'.$attendance->id.'">';
+echo html_writer::start_tag('form', ['method' => 'post', 'action' => 'save.php']);
+echo html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'sesskey', 'value' => sesskey()]);
+echo html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'attendanceid', 'value' => $attendance->id]);
+echo html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'cmid', 'value' => $cm->id]);
 
 // --- строим таблицу ---
 $table = new html_table();
@@ -94,7 +95,7 @@ foreach ($students as $student) {
 
         // селект с тремя вариантами
         $options = [
-            ''  => '-',  // null
+            ''  => '',  // null
             0   => '✖',
             1   => '✔'
         ];
@@ -107,7 +108,6 @@ foreach ($students as $student) {
 
 echo html_writer::table($table);
 echo '<input type="submit" value="Сохранить" class="btn btn-primary">';
-echo '<input type="hidden" name="cmid" value="<?php echo $cm->id; ?>">';
 echo '</form>';
 
 // JS для динамической смены цвета
