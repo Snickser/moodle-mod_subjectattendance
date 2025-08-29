@@ -25,6 +25,7 @@ function subjectattendance_supports($feature) {
 function subjectattendance_add_instance($data, $mform = null) {
     global $DB;
     $data->timecreated = time();
+    $data->timemodified = time();
     $id = $DB->insert_record('subjectattendance', $data);
     if (!empty($data->subjectslist)) {
         $lines = preg_split('/\r?\n/', trim($data->subjectslist));
