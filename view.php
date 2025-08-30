@@ -39,9 +39,10 @@ echo $OUTPUT->heading(format_string($attendance->name));
 echo '<style>
 .attendance-select { width: 56px; font-weight: bold; text-align: center; color: #000; }
 .attendance-select.present { background-color: #c8e6c9; } /* зелёный */
-.attendance-select.partial { background-color: #90caf9; } /* синий */
+.attendance-select.new     { background-color: #90caf9; } /* синий */
 .attendance-select.absent  { background-color: #ffcdd2; } /* красный */
-.attendance-select.none    { background-color: #fff9c4; } /* жёлтый */
+.attendance-select.partial { background-color: #fff9c4; } /* жёлтый */
+.attendance-select.none    { background-color: #ffffff; } /* белый */
 </style>';
 
 // получаем список предметов
