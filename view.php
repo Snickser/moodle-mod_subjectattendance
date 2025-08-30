@@ -159,7 +159,7 @@ foreach ($students as $student) {
     $table->data[] = $row;
 }
 
-$summ = '<div class="attendance-summary">'.
+$summ = get_string('total').'<div class="attendance-summary">'.
     ($sumpresent ? "<div style='flex: 1; background: #c8e6c9;'>$sumpresent</div>" : null).
     ($sumpartial ? "<div style='flex: 1; background: #fff9c4;'>$sumpartial</div>" : null).
     ($sumabsent ? "<div style='flex: 1; background: #ffcdd2;'>$sumabsent</div>" : null).
