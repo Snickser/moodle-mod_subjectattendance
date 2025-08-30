@@ -121,7 +121,7 @@ foreach ($students as $student) {
         $class = 'attendance-select';
         if ($status === '2') {
             $class .= ' present';
-	    $countpresent++;
+            $countpresent++;
         } else if ($status === '1') {
             $class .= ' partial';
             $countpartial++;
@@ -146,10 +146,10 @@ foreach ($students as $student) {
         }
     }
 
-    $row[] = '<div class="attendance-summary">'.
-    ($countpresent ? "<div style='flex: 1; background: #c8e6c9;'>$countpresent</div>" : null).
-    ($countpartial ? "<div style='flex: 1; background: #fff9c4;'>$countpartial</div>" : null).
-    ($countabsent ? "<div style='flex: 1; background: #ffcdd2;'>$countabsent</div>" : null).
+    $row[] = '<div class="attendance-summary">' .
+    ($countpresent ? "<div style='flex: 1; background: #c8e6c9;'>$countpresent</div>" : null) .
+    ($countpartial ? "<div style='flex: 1; background: #fff9c4;'>$countpartial</div>" : null) .
+    ($countabsent ? "<div style='flex: 1; background: #ffcdd2;'>$countabsent</div>" : null) .
     '</div>';
 
     $sumabsent += $countabsent;
@@ -159,13 +159,14 @@ foreach ($students as $student) {
     $table->data[] = $row;
 }
 
-$summ = get_string('total').'<div class="attendance-summary">'.
-    ($sumpresent ? "<div style='flex: 1; background: #c8e6c9;'>$sumpresent</div>" : null).
-    ($sumpartial ? "<div style='flex: 1; background: #fff9c4;'>$sumpartial</div>" : null).
-    ($sumabsent ? "<div style='flex: 1; background: #ffcdd2;'>$sumabsent</div>" : null).
+if ($sumpresent + $sumpartial + $sumabsent) {
+    $summ = get_string('total') . '<div class="attendance-summary">' .
+    ($sumpresent ? "<div style='flex: 1; background: #c8e6c9;'>$sumpresent</div>" : null) .
+    ($sumpartial ? "<div style='flex: 1; background: #fff9c4;'>$sumpartial</div>" : null) .
+    ($sumabsent ? "<div style='flex: 1; background: #ffcdd2;'>$sumabsent</div>" : null) .
     '</div>';
-
-$table->data[] = array_merge(array_map(fn($s) => '', $subjects), [''], [$summ]);
+    $table->data[] = array_merge(array_map(fn($s) => '', $subjects), [''], [$summ]);
+}
 
 echo html_writer::table($table);
 
