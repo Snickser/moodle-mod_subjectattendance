@@ -71,6 +71,7 @@ if ($selectedgroup && $selectedgroup != 0) {
 echo '<style>
 .attendance-select { width: 60px; font-weight: bold; text-align: center; color: #000; }
 .attendance-select.present { background-color: #c8e6c9; } /* зелёный */
+.attendance-select.partial { background-color: #90caf9; } /* синий */
 .attendance-select.absent  { background-color: #ffcdd2; } /* красный */
 .attendance-select.none    { background-color: #fff9c4; } /* жёлтый */
 </style>';
@@ -100,8 +101,10 @@ foreach ($students as $student) {
 
         // класс по значению
         $class = 'attendance-select';
-        if ($status === 1) {
+        if ($status === 2) {
             $class .= ' present';
+        } else if ($status === 1) {
+            $class .= ' partial';
         } else if ($status === 0) {
             $class .= ' absent';
         } else {
@@ -111,8 +114,9 @@ foreach ($students as $student) {
         // селект с тремя вариантами
         $options = [
             ''  => '', // null
-            0   => '✖',
-            1   => '✔',
+	    0   => '✖',
+	    1   => '⭘',
+            2   => '✔',
         ];
 
         $row[] = html_writer::select($options, $name, $status === null ? '' : (string)$status, null, ['class' => $class]);
@@ -122,7 +126,10 @@ foreach ($students as $student) {
 }
 
 echo html_writer::table($table);
-echo '<input type="submit" value="Сохранить" class="btn btn-primary">';
+
+echo '<div style="text-align: right; margin-top: 10px;">';
+echo '<input type="submit" value="'.get_string('save').'" class="btn btn-primary">';
+echo '</div>';
 echo '</form>';
 
 // JS для динамической смены цвета
@@ -131,16 +138,18 @@ document.addEventListener("DOMContentLoaded", function() {
     document.querySelectorAll(".attendance-select").forEach(function(select) {
         // установка цвета при загрузке
         let value = select.value;
-        select.classList.remove("present","absent","none");
-        if (value === "1") select.classList.add("present");
+        select.classList.remove("present","partial","absent","none");
+        if (value === "2") select.classList.add("present");
+        else if (value === "1") select.classList.add("partial");
         else if (value === "0") select.classList.add("absent");
         else select.classList.add("none");
 
         // динамическое изменение при выборе
         select.addEventListener("change", function() {
             let val = this.value;
-            this.classList.remove("present","absent","none");
-            if (val === "1") this.classList.add("present");
+            this.classList.remove("present","partial","absent","none");
+            if (val === "2") this.classList.add("present");
+            else if (val === "1") this.classList.add("partial");
             else if (val === "0") this.classList.add("absent");
             else this.classList.add("none");
         });
