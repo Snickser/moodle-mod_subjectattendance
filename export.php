@@ -20,7 +20,7 @@ $cmid = required_param('id', PARAM_INT);
 $cm = get_coursemodule_from_id('subjectattendance', $cmid, 0, false, MUST_EXIST);
 $context = context_module::instance($cm->id);
 require_course_login($cm->course, true, $cm);
-require_capability('mod/subjectattendance:mark', $context);
+require_capability('mod/subjectattendance:view', $context);
 
 $attendance = $DB->get_record('subjectattendance', ['id' => $cm->instance], '*', MUST_EXIST);
 
@@ -32,7 +32,11 @@ if (!$subjects) {
     throw new moodle_exception('nosubjects', 'subjectattendance');
 }
 
-$students = get_enrolled_users($context, 'mod/subjectattendance:view');
+if (has_capability('mod/subjectattendance:mark', $context, $USER->id)) {
+    $students = get_enrolled_users($context);
+} else {
+    $students[] = $USER;
+}
 
 header('Content-Type: text/csv; charset=utf-8');
 header('Content-Disposition: attachment; filename="subjectattendance_' . $attendance->id . '.csv"');

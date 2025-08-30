@@ -168,7 +168,8 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 </script>';
-    echo '<br><p><a href="export.php?id=' . $cm->id . '">Export CSV</a></p>';
 }
+
+echo '<p><a href="export.php?id=' . $cm->id . '">Export CSV</a></p>';
 
 echo $OUTPUT->footer();
