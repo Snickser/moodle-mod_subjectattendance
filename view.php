@@ -140,10 +140,10 @@ foreach ($students as $student) {
         }
     }
 
-    $row[] = "<div class='attendance-summary'>
-    <div style='flex: 1; background: #ffcdd2;'>$sumabsent</div>
-    <div style='flex: 1; background: #fff9c4;'>$sumpartial</div>
-    </div>";
+    $row[] = '<div class="attendance-summary">'.
+    ($sumabsent ? "<div style='flex: 1; background: #ffcdd2;'>$sumabsent</div>" : null).
+    ($sumpartial ? "<div style='flex: 1; background: #fff9c4;'>$sumpartial</div>" : null).
+    '</div>';
 
     $table->data[] = $row;
 }
