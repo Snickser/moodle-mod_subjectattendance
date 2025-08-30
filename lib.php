@@ -15,7 +15,9 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 function subjectattendance_supports($feature) {
-    switch ($feature) {
+    switch($feature) {
+        case FEATURE_MOD_PURPOSE:
+            return MOD_PURPOSE_ADMINISTRATION;
         case FEATURE_MOD_INTRO:
             return true;
         default:
