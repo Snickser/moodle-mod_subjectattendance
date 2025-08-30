@@ -43,7 +43,7 @@ echo '<style>
 .attendance-select.absent  { background-color: #ffcdd2; } /* красный */
 .attendance-select.partial { background-color: #fff9c4; } /* жёлтый */
 .attendance-select.none    { background-color: #ffffff; } /* белый */
-.attendance-summary	{ width: 100px; font-weight: bold; text-align: center; color: #000; display: flex;}
+.attendance-summary	{ width: 120px; font-weight: bold; text-align: center; color: #000; display: flex;}
 </style>';
 
 // получаем список предметов
@@ -101,6 +101,7 @@ foreach ($students as $student) {
     $row = [fullname($student)];
 
     $sumabsent = 0;
+    $sumpresent = 0;
     $sumpartial = 0;
 
     foreach ($subjects as $subject) {
@@ -116,6 +117,7 @@ foreach ($students as $student) {
         $class = 'attendance-select';
         if ($status === '2') {
             $class .= ' present';
+	    $sumpresent++;
         } else if ($status === '1') {
             $class .= ' partial';
             $sumpartial++;
@@ -141,8 +143,9 @@ foreach ($students as $student) {
     }
 
     $row[] = '<div class="attendance-summary">'.
-    ($sumabsent ? "<div style='flex: 1; background: #ffcdd2;'>$sumabsent</div>" : null).
+    ($sumpresent ? "<div style='flex: 1; background: #c8e6c9;'>$sumpresent</div>" : null).
     ($sumpartial ? "<div style='flex: 1; background: #fff9c4;'>$sumpartial</div>" : null).
+    ($sumabsent ? "<div style='flex: 1; background: #ffcdd2;'>$sumabsent</div>" : null).
     '</div>';
 
     $table->data[] = $row;
