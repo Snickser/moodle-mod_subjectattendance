@@ -35,52 +35,60 @@ $PAGE->set_heading($course->fullname);
 echo $OUTPUT->header();
 echo $OUTPUT->heading(format_string($attendance->name));
 
-// получаем список предметов
-$subjects = $DB->get_records('subjectattendance_subjects', ['attendanceid' => $attendance->id], '', 'id, name');
-
-// --- фильтр по группе ---
-// список всех групп пользователя в курсе
-$allgroups = groups_get_all_groups($course->id, $USER->id);
-$selectedgroup = optional_param('group', 0, PARAM_INT); // 0 = все группы
-
-// если выбранная группа недоступна — используем текущую группу пользователя
-if ($selectedgroup && !array_key_exists($selectedgroup, $allgroups)) {
-    $selectedgroup = groups_get_course_group($course, true);
-}
-
-// форма выбора группы
-if ($allgroups) {
-    $groupoptions = [0 => get_string('allgroups', 'subjectattendance')];
-    foreach ($allgroups as $gid => $g) {
-        $groupoptions[$gid] = $g->name;
-    }
-    echo '<form method="get">';
-    echo '<input type="hidden" name="id" value="' . $cm->id . '">';
-    echo html_writer::select($groupoptions, 'group', $selectedgroup, false, ['onchange' => 'this.form.submit();']);
-    echo '</form><br>';
-}
-
-// получаем студентов по выбранной группе
-if ($selectedgroup && $selectedgroup != 0) {
-    $students = get_enrolled_users($context, 'mod/subjectattendance:view', $selectedgroup);
-} else {
-    $students = get_enrolled_users($context, 'mod/subjectattendance:view');
-}
-
 // --- стили селектов ---
 echo '<style>
-.attendance-select { width: 60px; font-weight: bold; text-align: center; color: #000; }
+.attendance-select { width: 56px; font-weight: bold; text-align: center; color: #000; }
 .attendance-select.present { background-color: #c8e6c9; } /* зелёный */
 .attendance-select.partial { background-color: #90caf9; } /* синий */
 .attendance-select.absent  { background-color: #ffcdd2; } /* красный */
 .attendance-select.none    { background-color: #fff9c4; } /* жёлтый */
 </style>';
 
+// получаем список предметов
+$subjects = $DB->get_records('subjectattendance_subjects', ['attendanceid' => $attendance->id], '', 'id, name');
+
+if (has_capability('mod/subjectattendance:mark', $context, $USER->id)) {
+// --- фильтр по группе ---
+// список всех групп пользователя в курсе
+    if (is_siteadmin()) {
+        $allgroups = groups_get_all_groups($course->id);
+    } else {
+        $allgroups = groups_get_all_groups($course->id, $USER->id);
+    }
+    $selectedgroup = optional_param('group', 0, PARAM_INT); // 0 = все группы
+
+// если выбранная группа недоступна — используем текущую группу пользователя
+    if ($selectedgroup && !array_key_exists($selectedgroup, $allgroups)) {
+        $selectedgroup = groups_get_course_group($course, true);
+    }
+
+// форма выбора группы
+    if ($allgroups) {
+        $groupoptions = [0 => get_string('allgroups', 'subjectattendance')];
+        foreach ($allgroups as $gid => $g) {
+            $groupoptions[$gid] = $g->name;
+        }
+        echo '<form method="get">';
+        echo '<input type="hidden" name="id" value="' . $cm->id . '">';
+        echo html_writer::select($groupoptions, 'group', $selectedgroup, false, ['onchange' => 'this.form.submit();']);
+        echo '</form><br>';
+    }
+
+// получаем студентов по выбранной группе
+    if ($selectedgroup && $selectedgroup != 0) {
+        $students = get_enrolled_users($context, '', $selectedgroup);
+    } else {
+        $students = get_enrolled_users($context);
+    }
+
 // --- форма для сохранения ---
-echo html_writer::start_tag('form', ['method' => 'post', 'action' => 'save.php']);
-echo html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'sesskey', 'value' => sesskey()]);
-echo html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'attendanceid', 'value' => $attendance->id]);
-echo html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'cmid', 'value' => $cm->id]);
+    echo html_writer::start_tag('form', ['method' => 'post', 'action' => 'save.php']);
+    echo html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'sesskey', 'value' => sesskey()]);
+    echo html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'attendanceid', 'value' => $attendance->id]);
+    echo html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'cmid', 'value' => $cm->id]);
+} else {
+    $students[] = $USER;
+}
 
 // --- строим таблицу ---
 $table = new html_table();
@@ -96,16 +104,16 @@ foreach ($students as $student) {
             'userid'    => $student->id,
         ]);
 
-        $status = $log ? $log->status : null; // null = '-'
+        $status = $log ? $log->status : null;
         $name = "status[{$student->id}][{$subject->id}]";
 
         // класс по значению
         $class = 'attendance-select';
-        if ($status === 2) {
+        if ($status == 2) {
             $class .= ' present';
-        } else if ($status === 1) {
+        } else if ($status == 1) {
             $class .= ' partial';
-        } else if ($status === 0) {
+        } else if ($status == 0) {
             $class .= ' absent';
         } else {
             $class .= ' none';
@@ -113,13 +121,16 @@ foreach ($students as $student) {
 
         // селект с тремя вариантами
         $options = [
-            ''  => '', // null
-	    0   => '✖',
-	    1   => '⭘',
+            ''  => '',
+            0   => '✖',
+            1   => '⭘',
             2   => '✔',
         ];
-
-        $row[] = html_writer::select($options, $name, $status === null ? '' : (string)$status, null, ['class' => $class]);
+        if (has_capability('mod/subjectattendance:mark', $context, $USER->id)) {
+            $row[] = html_writer::select($options, $name, $status === null ? '' : (string)$status, null, ['class' => $class]);
+        } else {
+            $row[] = html_writer::tag('p', $options[$status], ['class' => $class]);
+        }
     }
 
     $table->data[] = $row;
@@ -127,13 +138,14 @@ foreach ($students as $student) {
 
 echo html_writer::table($table);
 
-echo '<div style="text-align: right; margin-top: 10px;">';
-echo '<input type="submit" value="'.get_string('save').'" class="btn btn-primary">';
-echo '</div>';
-echo '</form>';
+if (has_capability('mod/subjectattendance:mark', $context, $USER->id)) {
+    echo '<div style="text-align: right; margin-top: 10px;">';
+    echo '<input type="submit" value="' . get_string('save') . '" class="btn btn-primary">';
+    echo '</div>';
+    echo '</form>';
 
 // JS для динамической смены цвета
-echo '<script>
+    echo '<script>
 document.addEventListener("DOMContentLoaded", function() {
     document.querySelectorAll(".attendance-select").forEach(function(select) {
         // установка цвета при загрузке
@@ -156,7 +168,7 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 </script>';
-
-echo '<br><p><a href="export.php?id=' . $cm->id . '">Export CSV</a></p>';
+    echo '<br><p><a href="export.php?id=' . $cm->id . '">Export CSV</a></p>';
+}
 
 echo $OUTPUT->footer();

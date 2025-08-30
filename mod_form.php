@@ -35,7 +35,7 @@ class mod_subjectattendance_mod_form extends moodleform_mod {
         $attrs = ['wrap' => 'virtual', 'rows' => 8, 'cols' => 60];
         $mform->addElement('textarea', 'subjectslist', get_string('subjectslist', 'subjectattendance'), $attrs);
         $mform->setType('subjectslist', PARAM_RAW_TRIMMED);
-	$mform->addHelpButton('subjectslist', 'subjectslist', 'subjectattendance');
+        $mform->addHelpButton('subjectslist', 'subjectslist', 'subjectattendance');
 
         // подгружаем существующие предметы при редактировании
         if (!empty($this->current->instance)) {
