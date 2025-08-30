@@ -37,12 +37,13 @@ echo $OUTPUT->heading(format_string($attendance->name));
 
 // --- стили селектов ---
 echo '<style>
-.attendance-select { width: 56px; font-weight: bold; text-align: center; color: #000; }
+.attendance-select { width: 60px; font-weight: bold; text-align: center; color: #000; }
 .attendance-select.present { background-color: #c8e6c9; } /* зелёный */
 .attendance-select.new     { background-color: #90caf9; } /* синий */
 .attendance-select.absent  { background-color: #ffcdd2; } /* красный */
 .attendance-select.partial { background-color: #fff9c4; } /* жёлтый */
 .attendance-select.none    { background-color: #ffffff; } /* белый */
+.attendance-summary	{ width: 100px; font-weight: bold; text-align: center; color: #000; display: flex;}
 </style>';
 
 // получаем список предметов
@@ -93,11 +94,14 @@ if (has_capability('mod/subjectattendance:mark', $context, $USER->id)) {
 
 // --- строим таблицу ---
 $table = new html_table();
-$table->head = array_merge([get_string('fullname')], array_map(fn($s) => $s->name, $subjects));
+$table->head = array_merge([get_string('fullname')], array_map(fn($s) => $s->name, $subjects), [get_string('stats')]);
 $table->attributes['class'] = 'generaltable';
 
 foreach ($students as $student) {
     $row = [fullname($student)];
+
+    $sumabsent = 0;
+    $sumpartial = 0;
 
     foreach ($subjects as $subject) {
         $log = $DB->get_record('subjectattendance_log', [
@@ -105,17 +109,19 @@ foreach ($students as $student) {
             'userid'    => $student->id,
         ]);
 
-        $status = $log ? $log->status : null;
+        $status = $log ? $log->status : null; // String.
         $name = "status[{$student->id}][{$subject->id}]";
 
         // класс по значению
         $class = 'attendance-select';
-        if ($status == 2) {
+        if ($status === '2') {
             $class .= ' present';
-        } else if ($status == 1) {
+        } else if ($status === '1') {
             $class .= ' partial';
-        } else if ($status == 0) {
+            $sumpartial++;
+        } else if ($status === '0') {
             $class .= ' absent';
+            $sumabsent++;
         } else {
             $class .= ' none';
         }
@@ -130,9 +136,14 @@ foreach ($students as $student) {
         if (has_capability('mod/subjectattendance:mark', $context, $USER->id)) {
             $row[] = html_writer::select($options, $name, $status === null ? '' : (string)$status, null, ['class' => $class]);
         } else {
-            $row[] = html_writer::tag('p', $options[$status], ['class' => $class]);
+            $row[] = html_writer::tag('div', $options[$status], ['class' => $class]);
         }
     }
+
+    $row[] = "<div class='attendance-summary'>
+    <div style='flex: 1; background: #ffcdd2;'>$sumabsent</div>
+    <div style='flex: 1; background: #fff9c4;'>$sumpartial</div>
+    </div>";
 
     $table->data[] = $row;
 }
