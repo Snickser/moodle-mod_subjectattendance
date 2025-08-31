@@ -37,13 +37,13 @@ echo $OUTPUT->heading(format_string($attendance->name));
 
 // --- стили селектов ---
 echo '<style>
-.attendance-select { width: 60px; font-weight: bold; text-align: center; color: #000; }
+.attendance-select { width: 5rem; font-weight: bold; text-align: center; color: #000; }
 .attendance-select.present { background-color: #c8e6c9; } /* зелёный */
 .attendance-select.new     { background-color: #90caf9; } /* синий */
 .attendance-select.absent  { background-color: #ffcdd2; } /* красный */
 .attendance-select.partial { background-color: #fff9c4; } /* жёлтый */
 .attendance-select.none    { background-color: #ffffff; } /* белый */
-.attendance-summary	{ width: 120px; font-weight: bold; text-align: center; color: #000; display: flex;}
+.attendance-summary	{ width: 8rem; font-weight: bold; text-align: center; color: #000; display: flex;}
 </style>';
 
 // получаем список предметов
