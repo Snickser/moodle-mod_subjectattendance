@@ -15,8 +15,22 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 defined('MOODLE_INTERNAL') || die();
-$plugin->component = 'mod_subjectattendance';
-$plugin->version = 2025083103;
-$plugin->requires = 2022112800;
-$plugin->maturity = MATURITY_STABLE;
-$plugin->release = 'v0.3';
+
+function xmldb_subjectattendance_upgrade($oldversion) {
+    global $DB;
+
+    $dbman = $DB->get_manager();
+
+    if ($oldversion < 2025083103) {
+        $table = new xmldb_table('subjectattendance');
+	$field = new xmldb_field('excluderoles', XMLDB_TYPE_TEXT, null, null, null, null, null, 'name');
+
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        upgrade_mod_savepoint(true, 2025083103, 'subjectattendance');
+    }
+
+    return true;
+}

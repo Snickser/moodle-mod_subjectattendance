@@ -14,6 +14,8 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
+$string['allgroups'] = 'Все группы';
+$string['excluderoles'] = 'Исключать роли';
 $string['modulename'] = 'Посещаемость по предметам';
 $string['modulenameplural'] = 'Посещаемости по предметам';
 $string['modulename_help'] = 'Модуль для отметки посещаемости по заранее заданным предметам/темам.';
@@ -30,4 +32,3 @@ $string['saved'] = 'Сохранено.';
 $string['subjectslist'] = 'Предметы (по одному на строку)';
 $string['subjectslist_help'] = 'Новые предметы добавляются в конец списка. Изменение имени ранее добавленных не производится, будет удаление старого и добавление нового, потому заранее следите за наименованием.';
 $string['pluginadministration'] = '';
-$string['allgroups'] = 'Все группы';

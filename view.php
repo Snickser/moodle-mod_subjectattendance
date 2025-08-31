@@ -102,6 +102,11 @@ $sumpresent = 0;
 $sumpartial = 0;
 
 foreach ($students as $student) {
+    $roles = get_user_roles($context, $student->id, true);
+    $roleids = array_map(fn($r) => $r->roleid, $roles);
+    $matches = array_intersect($roleids, explode(',', $attendance->excluderoles));
+    if($matches) continue;
+
     $row = [fullname($student)];
 
     $countabsent = 0;

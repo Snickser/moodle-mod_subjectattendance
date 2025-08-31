@@ -19,7 +19,7 @@ require_once($CFG->dirroot . '/course/moodleform_mod.php');
 
 class mod_subjectattendance_mod_form extends moodleform_mod {
     public function definition() {
-        global $DB;
+        global $DB, $USER;
         $mform = $this->_form;
 
         $mform->addElement('header', 'general', get_string('general', 'form'));
@@ -48,6 +48,21 @@ class mod_subjectattendance_mod_form extends moodleform_mod {
                 $mform->setDefault('subjectslist', implode("\n", $lines));
             }
         }
+
+	$context = context_user::instance($USER->id);
+	$roles = get_default_enrol_roles($context);
+        $select = $mform->addElement(
+            'select',
+            'excluderoles',
+            get_string('excluderoles', 'subjectattendance'),
+            $roles,
+            ['size' => 8]
+        );
+        $select->setMultiple(true);
+        $mform->setType('excluderoles', PARAM_TEXT); 
+        if (isset($this->_customdata['excluderoles'])) {
+	    $mform->setDefault('excluderoles', $this->_customdata['excluderoles']);
+	}
 
         $this->standard_coursemodule_elements();
         $this->add_action_buttons();

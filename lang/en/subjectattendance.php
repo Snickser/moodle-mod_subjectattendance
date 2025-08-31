@@ -14,6 +14,8 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
+$string['allgroups'] = 'All groups';
+$string['excluderoles'] = 'Exclude roles';
 $string['modulename'] = 'Subject attendance';
 $string['modulenameplural'] = 'Subject attendances';
 $string['modulename_help'] = 'Activity to mark attendance by subjects/topics.';
@@ -25,4 +27,3 @@ $string['subjectattendance:view'] = 'View subject attendance';
 $string['subjectslist'] = 'Subjects (one per line)';
 $string['subjectslist_help'] = 'New items are added to the end of the list. Changing the name of previously added ones is not performed, the old one will be deleted and a new one will be added, so watch the name in advance.';
 $string['pluginadministration'] = '';
-$string['allgroups'] = 'All groups';

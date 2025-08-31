@@ -51,6 +51,7 @@ function subjectattendance_update_instance($data, $mform = null) {
     global $DB;
     $data->timemodified = time();
     $data->id = $data->instance;
+    $data->excluderoles = implode(',', $data->excluderoles);
     $DB->update_record('subjectattendance', $data);
 
     // старые предметы
