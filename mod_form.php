@@ -49,8 +49,8 @@ class mod_subjectattendance_mod_form extends moodleform_mod {
             }
         }
 
-	$context = context_user::instance($USER->id);
-	$roles = get_default_enrol_roles($context);
+        $context = context_user::instance($USER->id);
+        $roles = get_default_enrol_roles($context);
         $select = $mform->addElement(
             'select',
             'excluderoles',
@@ -59,10 +59,10 @@ class mod_subjectattendance_mod_form extends moodleform_mod {
             ['size' => 8]
         );
         $select->setMultiple(true);
-        $mform->setType('excluderoles', PARAM_TEXT); 
+        $mform->setType('excluderoles', PARAM_TEXT);
         if (isset($this->_customdata['excluderoles'])) {
-	    $mform->setDefault('excluderoles', $this->_customdata['excluderoles']);
-	}
+            $mform->setDefault('excluderoles', $this->_customdata['excluderoles']);
+        }
 
         $this->standard_coursemodule_elements();
         $this->add_action_buttons();

@@ -23,7 +23,7 @@ function xmldb_subjectattendance_upgrade($oldversion) {
 
     if ($oldversion < 2025083103) {
         $table = new xmldb_table('subjectattendance');
-	$field = new xmldb_field('excluderoles', XMLDB_TYPE_TEXT, null, null, null, null, null, 'name');
+        $field = new xmldb_field('excluderoles', XMLDB_TYPE_TEXT, null, null, null, null, null, 'name');
 
         if (!$dbman->field_exists($table, $field)) {
             $dbman->add_field($table, $field);

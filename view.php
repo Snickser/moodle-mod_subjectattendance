@@ -50,8 +50,8 @@ echo '<style>
 $subjects = $DB->get_records('subjectattendance_subjects', ['attendanceid' => $attendance->id], '', 'id, name');
 
 if (has_capability('mod/subjectattendance:mark', $context, $USER->id)) {
-// --- фильтр по группе ---
-// список всех групп пользователя в курсе
+    // --- фильтр по группе ---
+    // список всех групп пользователя в курсе
     if (is_siteadmin()) {
         $allgroups = groups_get_all_groups($course->id);
     } else {
@@ -59,12 +59,12 @@ if (has_capability('mod/subjectattendance:mark', $context, $USER->id)) {
     }
     $selectedgroup = optional_param('group', 0, PARAM_INT); // 0 = все группы
 
-// если выбранная группа недоступна — используем текущую группу пользователя
+    // если выбранная группа недоступна — используем текущую группу пользователя
     if ($selectedgroup && !array_key_exists($selectedgroup, $allgroups)) {
         $selectedgroup = groups_get_course_group($course, true);
     }
 
-// форма выбора группы
+    // форма выбора группы
     if ($allgroups) {
         $groupoptions = [0 => get_string('allgroups', 'subjectattendance')];
         foreach ($allgroups as $gid => $g) {
@@ -76,14 +76,14 @@ if (has_capability('mod/subjectattendance:mark', $context, $USER->id)) {
         echo '</form><br>';
     }
 
-// получаем студентов по выбранной группе
+    // получаем студентов по выбранной группе
     if ($selectedgroup && $selectedgroup != 0) {
         $students = get_enrolled_users($context, '', $selectedgroup);
     } else {
         $students = get_enrolled_users($context);
     }
 
-// --- форма для сохранения ---
+    // --- форма для сохранения ---
     echo html_writer::start_tag('form', ['method' => 'post', 'action' => 'save.php']);
     echo html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'sesskey', 'value' => sesskey()]);
     echo html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'attendanceid', 'value' => $attendance->id]);
@@ -103,9 +103,11 @@ $sumpartial = 0;
 
 foreach ($students as $student) {
     if (!empty($attendance->excluderoles)) {
-	$roleids = array_map(fn($r) => $r->roleid, get_user_roles($context, $student->id, true));
-	$matches = array_intersect($roleids, explode(',', $attendance->excluderoles));
-	if($matches) continue;
+        $roleids = array_map(fn($r) => $r->roleid, get_user_roles($context, $student->id, true));
+        $matches = array_intersect($roleids, explode(',', $attendance->excluderoles));
+        if ($matches) {
+            continue;
+        }
     }
 
     $row = [fullname($student)];
@@ -182,7 +184,7 @@ if (has_capability('mod/subjectattendance:mark', $context, $USER->id)) {
     echo '</div>';
     echo '</form>';
 
-// JS для динамической смены цвета
+    // JS для динамической смены цвета
     echo '<script>
 document.addEventListener("DOMContentLoaded", function() {
     document.querySelectorAll(".attendance-select").forEach(function(select) {
