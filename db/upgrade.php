@@ -21,7 +21,7 @@ function xmldb_subjectattendance_upgrade($oldversion) {
 
     $dbman = $DB->get_manager();
 
-    if ($oldversion < 2025083103) {
+    if ($oldversion < 2025090103) {
         $table = new xmldb_table('subjectattendance');
         $field = new xmldb_field('excluderoles', XMLDB_TYPE_TEXT, null, null, null, null, null, 'name');
 
@@ -29,7 +29,7 @@ function xmldb_subjectattendance_upgrade($oldversion) {
             $dbman->add_field($table, $field);
         }
 
-        upgrade_mod_savepoint(true, 2025083103, 'subjectattendance');
+        upgrade_mod_savepoint(true, 2025090103, 'subjectattendance');
     }
 
     return true;
