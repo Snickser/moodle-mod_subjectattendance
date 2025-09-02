@@ -30,6 +30,7 @@ function subjectattendance_add_instance($data, $mform = null) {
     global $DB;
     $data->timecreated  = time();
     $data->timemodified = time();
+    $data->excluderoles = implode(',', $data->excluderoles);
     $id = $DB->insert_record('subjectattendance', $data);
 
     if (!empty($data->subjectslist)) {
