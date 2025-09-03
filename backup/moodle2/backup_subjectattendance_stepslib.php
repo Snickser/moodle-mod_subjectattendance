@@ -15,8 +15,17 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 defined('MOODLE_INTERNAL') || die();
-$plugin->component = 'mod_subjectattendance';
-$plugin->version = 2025090305;
-$plugin->requires = 2023100912;
-$plugin->maturity = MATURITY_STABLE;
-$plugin->release = 'v0.3';
+
+class backup_subjectattendance_activity_structure_step extends backup_activity_structure_step {
+    protected function define_structure() {
+        $subjectattendance = new backup_nested_element('subjectattendance', ['id'], [
+            'course', 'name', 'excluderoles', 'intro', 'introformat', 'timemodified']);
+
+        $subjectattendance->set_source_table('subjectattendance', ['id' => backup::VAR_ACTIVITYID]);
+
+        // Define file annotations
+        $subjectattendance->annotate_files('mod_subjectattendance', 'intro', null); // This file areas haven't itemid
+
+        return $this->prepare_activity_structure($subjectattendance);
+    }
+}

@@ -20,6 +20,8 @@ function subjectattendance_supports($feature) {
             return MOD_PURPOSE_ADMINISTRATION;
         case FEATURE_MOD_INTRO:
             return true;
+        case FEATURE_BACKUP_MOODLE2:
+            return true;
         default:
             return null;
     }
