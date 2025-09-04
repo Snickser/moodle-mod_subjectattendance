@@ -64,6 +64,23 @@ class mod_subjectattendance_mod_form extends moodleform_mod {
             $mform->setDefault('excluderoles', $this->_customdata['excluderoles']);
         }
 
+        $options = [
+        0 => '✖ ⭘ ✔',
+        1 => '❌ ⚠ ✅',
+        2 => '🟥 🟨 🟩',
+        3 => '🔴 🟡 🟢',
+        4 => '🥉 🥈 🥇',
+        5 => '🚷 ♿ 💯',
+        6 => '"2" "3" "5"',
+        ];
+        $select = $mform->addElement(
+            'select',
+            'types',
+            get_string('types', 'subjectattendance'),
+            $options,
+            ['size' => 7]
+        );
+
         $this->standard_coursemodule_elements();
         $this->add_action_buttons();
     }

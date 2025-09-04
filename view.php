@@ -142,15 +142,53 @@ foreach ($students as $student) {
 
         // селект с тремя вариантами
         $options = [
+        0 => [
             ''  => '',
             0   => '✖',
             1   => '⭘',
-            2   => '✔',
+        2   => '✔',
+        ],
+        1 => [
+            ''  => '',
+            0   => '❌',
+            1   => '⚠️',
+            2   => '✅',
+        ],
+        2 => [
+            ''  => '',
+            0   => '🟥',
+            1   => '🟨',
+            2   => '🟩',
+        ],
+        3 => [
+            ''  => '',
+            0   => '🔴',
+            1   => '🟡',
+            2   => '🟢',
+        ],
+        4 => [
+            ''  => '',
+            0   => '🥉',
+            1   => '🥈',
+            2   => '🥇',
+            ],
+        5 => [
+            ''  => '',
+            0   => '🚷',
+            1   => '♿',
+            2   => '💯',
+            ],
+        6 => [
+            ''  => '',
+            0   => '2',
+            1   => '3',
+            2   => '5',
+            ],
         ];
         if (has_capability('mod/subjectattendance:mark', $context, $USER->id)) {
-            $row[] = html_writer::select($options, $name, $status === null ? '' : (string)$status, null, ['class' => $class]);
+            $row[] = html_writer::select($options[$attendance->types], $name, $status === null ? '' : (string)$status, null, ['class' => $class]);
         } else {
-            $row[] = html_writer::tag('div', $options[$status], ['class' => $class]);
+            $row[] = html_writer::tag('div', $options[$attendance->types][$status], ['class' => $class]);
         }
     }
 

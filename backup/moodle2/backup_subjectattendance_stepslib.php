@@ -19,7 +19,7 @@ defined('MOODLE_INTERNAL') || die();
 class backup_subjectattendance_activity_structure_step extends backup_activity_structure_step {
     protected function define_structure() {
         $subjectattendance = new backup_nested_element('subjectattendance', ['id'], [
-            'course', 'name', 'excluderoles', 'intro', 'introformat', 'timemodified']);
+            'course', 'name', 'types', 'excluderoles', 'intro', 'introformat', 'timemodified']);
 
         $subjectattendance->set_source_table('subjectattendance', ['id' => backup::VAR_ACTIVITYID]);
 
