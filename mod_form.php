@@ -78,7 +78,7 @@ class mod_subjectattendance_mod_form extends moodleform_mod {
             'types',
             get_string('types', 'subjectattendance'),
             $options,
-            ['size' => 7]
+            ['size' => 8]
         );
 
         $this->standard_coursemodule_elements();
