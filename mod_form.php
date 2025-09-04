@@ -14,10 +14,26 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
+/**
+ * Plugin version and other meta-data are defined here.
+ *
+ * @package     mod_subjectattendance
+ * @copyright   2025 Alex Orlov <snickser@gmail.com>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 defined('MOODLE_INTERNAL') || die();
 require_once($CFG->dirroot . '/course/moodleform_mod.php');
 
+/**
+ * The class for plugin.
+ *
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class mod_subjectattendance_mod_form extends moodleform_mod {
+    /**
+     * Configuration form
+     */
     public function definition() {
         global $DB, $USER;
         $mform = $this->_form;
@@ -27,17 +43,13 @@ class mod_subjectattendance_mod_form extends moodleform_mod {
         $mform->setType('name', PARAM_TEXT);
         $mform->addRule('name', null, 'required', null, 'client');
 
-        // устаревшее: $this->add_intro_editor();
-        // новое:
         $this->standard_intro_elements();
 
-        // textarea для предметов
         $attrs = ['wrap' => 'virtual', 'rows' => 8, 'cols' => 60];
         $mform->addElement('textarea', 'subjectslist', get_string('subjectslist', 'subjectattendance'), $attrs);
         $mform->setType('subjectslist', PARAM_RAW_TRIMMED);
         $mform->addHelpButton('subjectslist', 'subjectslist', 'subjectattendance');
 
-        // подгружаем существующие предметы при редактировании
         if (!empty($this->current->instance)) {
             $subjects = $DB->get_records('subjectattendance_subjects', ['attendanceid' => $this->current->instance], 'id ASC');
             if ($subjects) {

@@ -14,20 +14,25 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
+/**
+ * Plugin version and other meta-data are defined here.
+ *
+ * @package     mod_subjectattendance
+ * @copyright   2025 Alex Orlov <snickser@gmail.com>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 require_once('../../config.php');
 
 require_login();
 require_sesskey();
 
-// получаем параметры
 $attendanceid = required_param('attendanceid', PARAM_INT);
 $cmid         = required_param('cmid', PARAM_INT);
 
-// получаем "сырые" данные из POST
 $statusraw = $_POST['status'] ?? [];
 $status = [];
 
-// безопасная очистка двумерного массива
 foreach ($statusraw as $userid => $subjects) {
     $userid = clean_param($userid, PARAM_INT);
     foreach ($subjects as $subjectid => $value) {
@@ -36,30 +41,24 @@ foreach ($statusraw as $userid => $subjects) {
     }
 }
 
-// получаем cm и context
 $cm = get_coursemodule_from_id('subjectattendance', $cmid, 0, false, MUST_EXIST);
 $context = context_module::instance($cm->id);
 $courseid = $cm->course;
 
-// проверка capability
 require_capability('mod/subjectattendance:mark', $context);
 
-// проверка доступа ко всем группам
 $accessallgroups = has_capability('moodle/site:accessallgroups', $context);
 
-// если обычный преподаватель — получаем доступные группы
 $allowedgroups = $accessallgroups ? [] : groups_get_all_groups($courseid, $USER->id);
 $allowedgroupids = array_keys($allowedgroups);
 
-// сохраняем данные
 foreach ($status as $userid => $subjects) {
-    // если пользователь не админ, проверяем группы студента
     if (!$accessallgroups) {
         $studentgroups = groups_get_all_groups($courseid, $userid);
         $studentgroupids = array_keys($studentgroups);
 
         if (empty(array_intersect($allowedgroupids, $studentgroupids))) {
-            continue; // студент не в ваших группах — пропускаем
+            continue;
         }
     }
 
@@ -67,14 +66,14 @@ foreach ($status as $userid => $subjects) {
         $log = $DB->get_record('subjectattendance_log', ['userid' => $userid, 'subjectid' => $subjectid]);
 
         if ($log) {
-            $log->status = $value; // 0,1 или null
+            $log->status = $value;
             $log->timemodified = time();
             $DB->update_record('subjectattendance_log', $log);
         } else {
             $DB->insert_record('subjectattendance_log', [
                 'userid'       => $userid,
                 'subjectid'    => $subjectid,
-                'status'       => $value, // null для "-"
+                'status'       => $value,
                 'timecreated'  => time(),
                 'timemodified' => time(),
             ]);
@@ -82,7 +81,6 @@ foreach ($status as $userid => $subjects) {
     }
 }
 
-// редирект обратно на view.php с уведомлением
 redirect(
     new moodle_url('/mod/subjectattendance/view.php', ['id' => $cm->id]),
     get_string('changessaved')

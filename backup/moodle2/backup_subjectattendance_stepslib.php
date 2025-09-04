@@ -14,17 +14,32 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
-defined('MOODLE_INTERNAL') || die();
+/**
+ * Plugin version and other meta-data are defined here.
+ *
+ * @package     mod_subjectattendance
+ * @copyright   2025 Alex Orlov <snickser@gmail.com>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
+/**
+ * Define the complete structure for backup, with file and id annotations.
+ *
+ */
 class backup_subjectattendance_activity_structure_step extends backup_activity_structure_step {
+    /**
+     * Defines the structure of the resulting xml file.
+     *
+     * @return backup_nested_element The structure wrapped by the common 'activity' element.
+     */
     protected function define_structure() {
         $subjectattendance = new backup_nested_element('subjectattendance', ['id'], [
             'course', 'name', 'types', 'excluderoles', 'intro', 'introformat', 'timemodified']);
 
         $subjectattendance->set_source_table('subjectattendance', ['id' => backup::VAR_ACTIVITYID]);
 
-        // Define file annotations
-        $subjectattendance->annotate_files('mod_subjectattendance', 'intro', null); // This file areas haven't itemid
+        // Define file annotations.
+        $subjectattendance->annotate_files('mod_subjectattendance', 'intro', null); // This file areas haven't itemid.
 
         return $this->prepare_activity_structure($subjectattendance);
     }

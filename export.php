@@ -14,20 +14,26 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
+/**
+ * Plugin version and other meta-data are defined here.
+ *
+ * @package     mod_subjectattendance
+ * @copyright   2025 Alex Orlov <snickser@gmail.com>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 require_once('../../config.php');
 
 $cmid = required_param('id', PARAM_INT);
 $cm = get_coursemodule_from_id('subjectattendance', $cmid, 0, false, MUST_EXIST);
 $context = context_module::instance($cm->id);
+
 require_course_login($cm->course, true, $cm);
 require_capability('mod/subjectattendance:view', $context);
 
 $attendance = $DB->get_record('subjectattendance', ['id' => $cm->instance], '*', MUST_EXIST);
 
-// получаем предметы с полями id и name
 $subjects = $DB->get_records('subjectattendance_subjects', ['attendanceid' => $attendance->id], 'id ASC', '*');
-
-// проверяем, что есть хотя бы один предмет
 if (!$subjects) {
     throw new moodle_exception('nosubjects', 'subjectattendance');
 }
@@ -35,34 +41,39 @@ if (!$subjects) {
 if (has_capability('mod/subjectattendance:mark', $context, $USER->id)) {
     $students = get_enrolled_users($context);
 } else {
-    $students[] = $USER;
+    $students = [$USER];
+}
+
+$subjectids = array_keys($subjects);
+$studentids = array_map(fn($s) => $s->id, $students);
+
+[$insqlsubj, $params1] = $DB->get_in_or_equal($subjectids, SQL_PARAMS_NAMED, 'subj');
+[$insqlstud, $params2] = $DB->get_in_or_equal($studentids, SQL_PARAMS_NAMED, 'stud');
+
+$sql = "SELECT * FROM {subjectattendance_log} WHERE subjectid $insqlsubj AND userid $insqlstud";
+$logs = $DB->get_records_sql($sql, $params1 + $params2);
+
+$logmap = [];
+foreach ($logs as $log) {
+    $logmap[$log->userid][$log->subjectid] = $log->status;
 }
 
 header('Content-Type: text/csv; charset=utf-8');
 header('Content-Disposition: attachment; filename="subjectattendance_' . $attendance->id . '.csv"');
-echo "\xEF\xBB\xBF"; // BOM для Excel
+echo "\xEF\xBB\xBF";
 
 $fp = fopen('php://output', 'w');
 
-// заголовки
 $header = array_merge(['Student ID', 'Student name'], array_map(fn($s) => $s->name, $subjects));
-fputcsv($fp, $header);
+fputcsv($fp, $header, ',', '"', '\\');
 
-// строки студентов
 foreach ($students as $student) {
     $row = [$student->id, fullname($student)];
     foreach ($subjects as $subject) {
-        if (!isset($subject->id)) {
-            continue; // пропускаем некорректные записи
-        }
-        $existing = $DB->get_record('subjectattendance_log', [
-            'subjectid' => $subject->id,
-            'userid'    => $student->id,
-        ]);
-        $status = ($existing && isset($existing->status)) ? $existing->status : '-';
+        $status = $logmap[$student->id][$subject->id] ?? '-';
         $row[] = $status;
     }
-    fputcsv($fp, $row);
+    fputcsv($fp, $row, ',', '"', '\\');
 }
 
 fclose($fp);

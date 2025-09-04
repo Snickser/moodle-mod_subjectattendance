@@ -14,6 +14,20 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
+/**
+ * Plugin version and other meta-data are defined here.
+ *
+ * @package     mod_subjectattendance
+ * @copyright   2025 Alex Orlov <snickser@gmail.com>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
+/**
+ * Indicates which features are supported by the module.
+ *
+ * @param string $feature The feature constant.
+ * @return mixed True/false/null or specific constant depending on feature.
+ */
 function subjectattendance_supports($feature) {
     switch ($feature) {
         case FEATURE_MOD_PURPOSE:
@@ -27,7 +41,13 @@ function subjectattendance_supports($feature) {
     }
 }
 
-// Добавление нового экземпляра модуля
+/**
+ * Creates a new subject attendance instance.
+ *
+ * @param stdClass $data Data from the form.
+ * @param mod_form|null $mform The form instance (optional).
+ * @return int New instance ID.
+ */
 function subjectattendance_add_instance($data, $mform = null) {
     global $DB;
     $data->timecreated  = time();
@@ -49,7 +69,13 @@ function subjectattendance_add_instance($data, $mform = null) {
     return $id;
 }
 
-// Обновление существующего экземпляра модуля
+/**
+ * Updates an existing subject attendance instance.
+ *
+ * @param stdClass $data Data from the form (includes 'instance').
+ * @param mod_form|null $mform The form instance (optional).
+ * @return bool True on success.
+ */
 function subjectattendance_update_instance($data, $mform = null) {
     global $DB;
     $data->timemodified = time();
@@ -57,14 +83,14 @@ function subjectattendance_update_instance($data, $mform = null) {
     $data->excluderoles = implode(',', $data->excluderoles);
     $DB->update_record('subjectattendance', $data);
 
-    // старые предметы
+    // Load old subjects.
     $oldsubjects = $DB->get_records('subjectattendance_subjects', ['attendanceid' => $data->id]);
     $oldnames = [];
     foreach ($oldsubjects as $s) {
         $oldnames[$s->name] = $s->id;
     }
 
-    // новые строки из формы
+    // Parse new subjects from list.
     $lines = preg_split('/\r?\n/', trim($data->subjectslist));
     $lines = array_map('trim', $lines);
     $lines = array_filter($lines, fn($line) => $line !== '');
@@ -73,11 +99,9 @@ function subjectattendance_update_instance($data, $mform = null) {
 
     foreach ($lines as $line) {
         if (isset($oldnames[$line])) {
-            // существующий предмет, оставляем id
             $newsubjectids[] = $oldnames[$line];
-            unset($oldnames[$line]); // чтобы потом удалить только старые неиспользуемые
+            unset($oldnames[$line]);
         } else {
-            // новый предмет
             $newsubjectids[] = $DB->insert_record('subjectattendance_subjects', (object)[
                 'attendanceid' => $data->id,
                 'name' => $line,
@@ -85,30 +109,31 @@ function subjectattendance_update_instance($data, $mform = null) {
         }
     }
 
-    // удаляем только предметы, которые были удалены пользователем
+    // Delete old subjects not in the new list.
     if (!empty($oldnames)) {
         $DB->delete_records_list('subjectattendance_subjects', 'id', array_values($oldnames));
-        // ⚠ старые логи останутся, можно их удалить отдельно или оставить
     }
 
     return true;
 }
 
-// Удаление экземпляра модуля
+/**
+ * Deletes a subject attendance instance and its related data.
+ *
+ * @param int $id Instance ID.
+ * @return bool True on success.
+ */
 function subjectattendance_delete_instance($id) {
     global $DB;
 
-    // Получаем все предметы модуля
     $subjects = $DB->get_records('subjectattendance_subjects', ['attendanceid' => $id]);
     $subjectids = array_keys($subjects);
 
-    // Удаляем все логи для этих предметов
     if ($subjectids) {
         [$insql, $params] = $DB->get_in_or_equal($subjectids, SQL_PARAMS_NAMED);
         $DB->delete_records_select('subjectattendance_log', "subjectid $insql", $params);
     }
 
-    // Удаляем предметы и сам модуль
     $DB->delete_records('subjectattendance_subjects', ['attendanceid' => $id]);
     $DB->delete_records('subjectattendance', ['id' => $id]);
 

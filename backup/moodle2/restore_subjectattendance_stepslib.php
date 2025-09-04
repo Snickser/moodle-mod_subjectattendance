@@ -14,17 +14,38 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
-defined('MOODLE_INTERNAL') || die();
+/**
+ * Plugin version and other meta-data are defined here.
+ *
+ * @package     mod_subjectattendance
+ * @copyright   2025 Alex Orlov <snickser@gmail.com>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 
+/**
+ * Defines the structure step to restore one mod_subjectattendance activity.
+ *
+ */
 class restore_subjectattendance_activity_structure_step extends restore_activity_structure_step {
+    /**
+     * Defines the structure to be restored.
+     *
+     * @return restore_path_element[].
+     */
     protected function define_structure() {
         $paths = [];
         $paths[] = new restore_path_element('subjectattendance', '/activity/subjectattendance');
 
-        // Return the paths wrapped into standard activity structure
+        // Return the paths wrapped into standard activity structure.
         return $this->prepare_activity_structure($paths);
     }
 
+    /**
+     * Process data
+     *
+     * @param \stdClass $data The data in object form
+     * @return void
+     */
     protected function process_subjectattendance($data) {
         global $DB;
 
@@ -40,8 +61,11 @@ class restore_subjectattendance_activity_structure_step extends restore_activity
         $this->apply_activity_instance($newitemid);
     }
 
+    /**
+     * Defines post-execution actions.
+     */
     protected function after_execute() {
-        // Add page related files, no need to match by itemname (just internally handled context)
+        // Add page related files, no need to match by itemname (just internally handled context).
         $this->add_related_files('mod_subjectattendance', 'intro', null);
     }
 }

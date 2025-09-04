@@ -14,9 +14,17 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
+/**
+ * Plugin version and other meta-data are defined here.
+ *
+ * @package     mod_subjectattendance
+ * @copyright   2025 Alex Orlov <snickser@gmail.com>
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 require_once('../../config.php');
 
-$id = required_param('id', PARAM_INT); // course module id
+$id = required_param('id', PARAM_INT);
 $cm = get_coursemodule_from_id('subjectattendance', $id, 0, false, MUST_EXIST);
 
 require_login($cm->course, false, $cm);
@@ -35,7 +43,6 @@ $PAGE->set_heading($course->fullname);
 echo $OUTPUT->header();
 echo $OUTPUT->heading(format_string($attendance->name));
 
-// --- стили селектов ---
 echo '<style>
 .attendance-select { width: 5rem; font-weight: bold; text-align: center; color: #000; }
 .attendance-select.present { background-color: #c8e6c9; } /* зелёный */
@@ -46,12 +53,9 @@ echo '<style>
 .attendance-summary	{ width: 8rem; font-weight: bold; text-align: center; color: #000; display: flex;}
 </style>';
 
-// получаем список предметов
 $subjects = $DB->get_records('subjectattendance_subjects', ['attendanceid' => $attendance->id], '', 'id, name');
 
 if (has_capability('mod/subjectattendance:mark', $context, $USER->id)) {
-    // --- фильтр по группе ---
-    // список всех групп пользователя в курсе
     if (is_siteadmin()) {
         $allgroups = groups_get_all_groups($course->id);
     } else {
@@ -59,12 +63,10 @@ if (has_capability('mod/subjectattendance:mark', $context, $USER->id)) {
     }
     $selectedgroup = optional_param('group', 0, PARAM_INT); // 0 = все группы
 
-    // если выбранная группа недоступна — используем текущую группу пользователя
     if ($selectedgroup && !array_key_exists($selectedgroup, $allgroups)) {
         $selectedgroup = groups_get_course_group($course, true);
     }
 
-    // форма выбора группы
     if ($allgroups) {
         $groupoptions = [0 => get_string('allgroups', 'subjectattendance')];
         foreach ($allgroups as $gid => $g) {
@@ -76,14 +78,12 @@ if (has_capability('mod/subjectattendance:mark', $context, $USER->id)) {
         echo '</form><br>';
     }
 
-    // получаем студентов по выбранной группе
     if ($selectedgroup && $selectedgroup != 0) {
         $students = get_enrolled_users($context, '', $selectedgroup);
     } else {
         $students = get_enrolled_users($context);
     }
 
-    // --- форма для сохранения ---
     echo html_writer::start_tag('form', ['method' => 'post', 'action' => 'save.php']);
     echo html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'sesskey', 'value' => sesskey()]);
     echo html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'attendanceid', 'value' => $attendance->id]);
@@ -92,7 +92,6 @@ if (has_capability('mod/subjectattendance:mark', $context, $USER->id)) {
     $students[] = $USER;
 }
 
-// --- строим таблицу ---
 $table = new html_table();
 $table->head = array_merge([get_string('fullname')], array_map(fn($s) => $s->name, $subjects), [get_string('stats')]);
 $table->attributes['class'] = 'generaltable';
@@ -122,10 +121,9 @@ foreach ($students as $student) {
             'userid'    => $student->id,
         ]);
 
-        $status = $log ? $log->status : null; // String.
+        $status = $log ? $log->status : null;
         $name = "status[{$student->id}][{$subject->id}]";
 
-        // класс по значению
         $class = 'attendance-select';
         if ($status === '2') {
             $class .= ' present';
@@ -140,7 +138,6 @@ foreach ($students as $student) {
             $class .= ' none';
         }
 
-        // селект с тремя вариантами
         $options = [
         0 => [
             ''  => '',
@@ -186,7 +183,13 @@ foreach ($students as $student) {
             ],
         ];
         if (has_capability('mod/subjectattendance:mark', $context, $USER->id)) {
-            $row[] = html_writer::select($options[$attendance->types], $name, $status === null ? '' : (string)$status, null, ['class' => $class]);
+            $row[] = html_writer::select(
+                $options[$attendance->types],
+                $name,
+                $status === null ? '' : (string)$status,
+                null,
+                ['class' => $class]
+            );
         } else {
             $row[] = html_writer::tag('div', $options[$attendance->types][$status], ['class' => $class]);
         }
@@ -222,7 +225,6 @@ if (has_capability('mod/subjectattendance:mark', $context, $USER->id)) {
     echo '</div>';
     echo '</form>';
 
-    // JS для динамической смены цвета
     echo '<script>
 document.addEventListener("DOMContentLoaded", function() {
     document.querySelectorAll(".attendance-select").forEach(function(select) {
