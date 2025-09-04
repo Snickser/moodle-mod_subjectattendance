@@ -56,7 +56,7 @@ class mod_subjectattendance_mod_form extends moodleform_mod {
             'excluderoles',
             get_string('excluderoles', 'subjectattendance'),
             $roles,
-            ['size' => 8]
+            ['size' => 5]
         );
         $select->setMultiple(true);
         $mform->setType('excluderoles', PARAM_TEXT);
