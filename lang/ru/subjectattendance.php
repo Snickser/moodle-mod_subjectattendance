@@ -22,21 +22,21 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+$string['absent'] = 'Отсутствовал';
 $string['allgroups'] = 'Все группы';
 $string['excluderoles'] = 'Исключать роли';
+$string['excused'] = 'Уважительная причина';
 $string['modulename'] = 'Посещаемость по предметам';
 $string['modulenameplural'] = 'Посещаемости по предметам';
 $string['modulename_help'] = 'Модуль для отметки посещаемости по заранее заданным предметам/темам.';
+$string['present'] = 'Присутствовал';
+$string['pluginadministration'] = '';
+$string['pluginname'] = 'Посещаемость по предметам';
+$string['save'] = 'Сохранить';
+$string['saved'] = 'Сохранено.';
+$string['student'] = 'Студент';
 $string['subjectattendance:addinstance'] = 'Добавить модуль Посещаемость по предметам';
 $string['subjectattendance:mark'] = 'Отмечать посещаемость по предметам';
 $string['subjectattendance:view'] = 'Просматривать посещаемость по предметам';
-$string['pluginname'] = 'Посещаемость по предметам';
-$string['student'] = 'Студент';
-$string['present'] = 'Присутствовал';
-$string['absent'] = 'Отсутствовал';
-$string['excused'] = 'Уважительная причина';
-$string['save'] = 'Сохранить';
-$string['saved'] = 'Сохранено.';
 $string['subjectslist'] = 'Предметы (по одному на строку)';
 $string['subjectslist_help'] = 'Новые предметы добавляются в конец списка. Изменение имени ранее добавленных не производится, будет удаление старого и добавление нового, потому заранее следите за наименованием.';
-$string['pluginadministration'] = '';
