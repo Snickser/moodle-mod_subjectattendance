@@ -50,7 +50,8 @@ echo '<style>
 .attendance-select.absent  { background-color: #ffcdd2; } /* красный */
 .attendance-select.partial { background-color: #fff9c4; } /* жёлтый */
 .attendance-select.none    { background-color: #ffffff; } /* белый */
-.attendance-summary	{ width: 8rem; font-weight: bold; text-align: center; color: #000; display: flex;}
+.attendance-summary	   { width: 8rem; font-weight: bold; text-align: center; color: #000; display: flex;}
+.attendance-total-summary  { width: 8rem; font-weight: bold; text-align: center; color: #000; display: flex;}
 </style>';
 
 $subjects = $DB->get_records('subjectattendance_subjects', ['attendanceid' => $attendance->id], '', 'id, name');
@@ -61,7 +62,7 @@ if (has_capability('mod/subjectattendance:mark', $context, $USER->id)) {
     } else {
         $allgroups = groups_get_all_groups($course->id, $USER->id);
     }
-    $selectedgroup = optional_param('group', 0, PARAM_INT); // 0 = все группы
+    $selectedgroup = optional_param('group', 0, PARAM_INT);
 
     if ($selectedgroup && !array_key_exists($selectedgroup, $allgroups)) {
         $selectedgroup = groups_get_course_group($course, true);
@@ -83,11 +84,6 @@ if (has_capability('mod/subjectattendance:mark', $context, $USER->id)) {
     } else {
         $students = get_enrolled_users($context);
     }
-
-    echo html_writer::start_tag('form', ['method' => 'post', 'action' => 'save.php']);
-    echo html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'sesskey', 'value' => sesskey()]);
-    echo html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'attendanceid', 'value' => $attendance->id]);
-    echo html_writer::empty_tag('input', ['type' => 'hidden', 'name' => 'cmid', 'value' => $cm->id]);
 } else {
     $students[] = $USER;
 }
@@ -188,7 +184,13 @@ foreach ($students as $student) {
                 $name,
                 $status === null ? '' : (string)$status,
                 null,
-                ['class' => $class]
+                [
+                'class' => $class,
+                'data-studentid' => $student->id,
+                'data-subjectid' => $subject->id,
+                'data-cmid' => $cm->id,
+                'data-attendanceid' => $attendance->id,
+                ]
             );
         } else {
             $row[] = html_writer::tag('div', $options[$attendance->types][$status], ['class' => $class]);
@@ -209,7 +211,7 @@ foreach ($students as $student) {
 }
 
 if ($sumpresent + $sumpartial + $sumabsent) {
-    $summ = get_string('total') . '<div class="attendance-summary">' .
+    $summ = get_string('total') . '<div class="attendance-total-summary">' .
     ($sumpresent ? "<div style='flex: 1; background: #c8e6c9;'>$sumpresent</div>" : null) .
     ($sumpartial ? "<div style='flex: 1; background: #fff9c4;'>$sumpartial</div>" : null) .
     ($sumabsent ? "<div style='flex: 1; background: #ffcdd2;'>$sumabsent</div>" : null) .
@@ -220,30 +222,71 @@ if ($sumpresent + $sumpartial + $sumabsent) {
 echo html_writer::table($table);
 
 if (has_capability('mod/subjectattendance:mark', $context, $USER->id)) {
-    echo '<div style="text-align: right; margin-top: 10px;">';
-    echo '<input type="submit" value="' . get_string('save') . '" class="btn btn-primary">';
-    echo '</div>';
-    echo '</form>';
-
     echo '<script>
 document.addEventListener("DOMContentLoaded", function() {
-    document.querySelectorAll(".attendance-select").forEach(function(select) {
-        // установка цвета при загрузке
-        let value = select.value;
-        select.classList.remove("present","partial","absent","none");
-        if (value === "2") select.classList.add("present");
-        else if (value === "1") select.classList.add("partial");
-        else if (value === "0") select.classList.add("absent");
-        else select.classList.add("none");
 
-        // динамическое изменение при выборе
+    function updateClass(select) {
+        let val = select.value;
+        select.classList.remove("present","partial","absent","none");
+        if (val === "2") select.classList.add("present");
+        else if (val === "1") select.classList.add("partial");
+        else if (val === "0") select.classList.add("absent");
+        else select.classList.add("none");
+    }
+
+    function updateRowSummary(row) {
+        let present = 0, partial = 0, absent = 0;
+        row.querySelectorAll(".attendance-select").forEach(function(sel) {
+            if (sel.value === "2") present++;
+            else if (sel.value === "1") partial++;
+            else if (sel.value === "0") absent++;
+        });
+        let summary = row.querySelector(".attendance-summary");
+        if (!summary) return;
+        summary.innerHTML =
+            (present ? "<div style=\'flex: 1; background: #c8e6c9;\'>" + present + "</div>" : "") +
+            (partial ? "<div style=\'flex: 1; background: #fff9c4;\'>" + partial + "</div>" : "") +
+            (absent ? "<div style=\'flex: 1; background: #ffcdd2;\'>" + absent + "</div>" : "");
+    }
+
+    document.querySelectorAll(".attendance-select").forEach(function(select) {
+        updateClass(select);
+
         select.addEventListener("change", function() {
-            let val = this.value;
-            this.classList.remove("present","partial","absent","none");
-            if (val === "2") this.classList.add("present");
-            else if (val === "1") this.classList.add("partial");
-            else if (val === "0") this.classList.add("absent");
-            else this.classList.add("none");
+            updateClass(this);
+
+            let studentid = this.dataset.studentid;
+            let subjectid = this.dataset.subjectid;
+            let cmid = this.dataset.cmid;
+            let attendanceid = this.dataset.attendanceid;
+
+            fetch("' . new moodle_url('/mod/subjectattendance/ajax_save.php') . '", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                body: JSON.stringify({
+                    sesskey: "' . sesskey() . '",
+                    studentid: studentid,
+                    subjectid: subjectid,
+                    cmid: cmid,
+                    attendanceid: attendanceid,
+                    status: this.value
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (!data.success) {
+                    alert(data.error);
+                } else {
+                    let row = this.closest("tr");
+                    updateRowSummary(row);
+                }
+            })
+            .catch(error => {
+                alert(error);
+            });
         });
     });
 });
