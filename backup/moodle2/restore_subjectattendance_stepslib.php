@@ -35,6 +35,7 @@ class restore_subjectattendance_activity_structure_step extends restore_activity
     protected function define_structure() {
         $paths = [];
         $paths[] = new restore_path_element('subjectattendance', '/activity/subjectattendance');
+        $paths[] = new restore_path_element('subjectattendance_subjects', '/activity/subjectattendance/subjects/subject');
 
         // Return the paths wrapped into standard activity structure.
         return $this->prepare_activity_structure($paths);
@@ -50,7 +51,6 @@ class restore_subjectattendance_activity_structure_step extends restore_activity
         global $DB;
 
         $data = (object)$data;
-        $oldid = $data->id;
         $data->course = $this->get_courseid();
 
         if (empty($data->timecreated)) {
@@ -59,6 +59,23 @@ class restore_subjectattendance_activity_structure_step extends restore_activity
 
         $newitemid = $DB->insert_record('subjectattendance', $data);
         $this->apply_activity_instance($newitemid);
+    }
+
+    /**
+     * Process data
+     *
+     * @param \stdClass $data The data in object form
+     * @return void
+     */
+    protected function process_subjectattendance_subjects($data) {
+        global $DB;
+
+        $data = (object)$data;
+        $oldid = $data->id;
+        $data->attendanceid = $this->get_new_parentid('subjectattendance');
+
+        $newitemid = $DB->insert_record('subjectattendance_subjects', $data);
+        $this->set_mapping('subjectattendance_subjects', $oldid, $newitemid);
     }
 
     /**

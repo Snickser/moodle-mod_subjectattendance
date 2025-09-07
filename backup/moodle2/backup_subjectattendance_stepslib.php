@@ -36,7 +36,14 @@ class backup_subjectattendance_activity_structure_step extends backup_activity_s
         $subjectattendance = new backup_nested_element('subjectattendance', ['id'], [
             'course', 'name', 'types', 'excluderoles', 'intro', 'introformat', 'timemodified']);
 
+        $subjects = new backup_nested_element('subjects');
+        $subject = new backup_nested_element('subject', ['id'], ['attendanceid', 'name']);
+
+        $subjectattendance->add_child($subjects);
+        $subjects->add_child($subject);
+
         $subjectattendance->set_source_table('subjectattendance', ['id' => backup::VAR_ACTIVITYID]);
+        $subject->set_source_table('subjectattendance_subjects', ['attendanceid' => backup::VAR_PARENTID]);
 
         // Define file annotations.
         $subjectattendance->annotate_files('mod_subjectattendance', 'intro', null); // This file areas haven't itemid.
