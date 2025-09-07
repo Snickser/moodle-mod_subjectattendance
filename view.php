@@ -111,8 +111,7 @@ foreach ($students as $student) {
     $countpartial = 0;
 
     foreach ($subjects as $subject) {
-
-	$status = isset($logmap[$student->id][$subject->id]) ? $logmap[$student->id][$subject->id] : null;
+        $status = isset($logmap[$student->id][$subject->id]) ? $logmap[$student->id][$subject->id] : null;
         $name = "status[{$student->id}][{$subject->id}]";
 
         $class = 'attendance-select';
