@@ -99,5 +99,5 @@ define(['jquery'], function($) {
         });
     }
 
-    return { init: init };
+    return {init: init};
 });
