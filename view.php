@@ -226,4 +226,7 @@ if (has_capability('mod/subjectattendance:mark', $context, $USER->id)) {
     $PAGE->requires->js_call_amd('mod_subjectattendance/attendance', 'init');
 }
 
+// Completion and trigger events.
+subjectattendance_view($attendance, $course, $cm, $context);
+
 echo $OUTPUT->footer();

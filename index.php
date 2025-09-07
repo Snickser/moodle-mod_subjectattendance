@@ -25,7 +25,16 @@
 require_once('../../config.php');
 $courseid = required_param('id', PARAM_INT);
 $course = $DB->get_record('course', ['id' => $courseid], '*', MUST_EXIST);
+
 require_course_login($course);
+
+$params = [
+    'context' => context_course::instance($course->id),
+];
+$event = \mod_subjectattendance\event\course_module_instance_list_viewed::create($params);
+$event->add_record_snapshot('course', $course);
+$event->trigger();
+
 $PAGE->set_url('/mod/subjectattendance/index.php', ['id' => $courseid]);
 $PAGE->set_title(get_string('modulenameplural', 'subjectattendance'));
 $PAGE->set_heading($course->fullname);
@@ -42,4 +51,5 @@ if ($records) {
 } else {
     echo '<p>No instances</p>';
 }
+
 echo $OUTPUT->footer();
