@@ -23,7 +23,10 @@ define(['jquery'], function($) {
      * @param {HTMLElement} row - the table row (tr).
      */
     function updateRowSummary(row) {
-        let present = 0, partial = 0, absent = 0;
+        let present = 0;
+        let partial = 0;
+        let absent = 0;
+
         $(row).find(".attendance-select").each(function() {
             if ($(this).val() === "2") {
                 present++;
@@ -33,10 +36,12 @@ define(['jquery'], function($) {
                 absent++;
             }
         });
+
         let $summary = $(row).find(".attendance-summary");
         if (!$summary.length) {
             return;
         }
+
         $summary.html(
             (present ? "<div style='flex: 1; background: #c8e6c9;'>" + present + "</div>" : "") +
             (partial ? "<div style='flex: 1; background: #fff9c4;'>" + partial + "</div>" : "") +
@@ -58,6 +63,7 @@ define(['jquery'], function($) {
                 let subjectid = $(this).data("subjectid");
                 let cmid = $(this).data("cmid");
                 let attendanceid = $(this).data("attendanceid");
+                let status = $(this).val();
 
                 fetch(M.cfg.wwwroot + "/mod/subjectattendance/ajax_save.php", {
                     method: "POST",
@@ -67,22 +73,28 @@ define(['jquery'], function($) {
                     },
                     body: JSON.stringify({
                         sesskey: M.cfg.sesskey,
-                        studentid: studentid,
-                        subjectid: subjectid,
-                        cmid: cmid,
-                        attendanceid: attendanceid,
-                        status: $(this).val()
+                        studentid,
+                        subjectid,
+                        cmid,
+                        attendanceid,
+                        status
                     })
                 })
                 .then(r => r.json())
                 .then(data => {
                     if (!data.success) {
+                        // eslint-disable-next-line no-alert
                         alert(data.error);
+                        return null;
                     } else {
                         updateRowSummary($(this).closest("tr"));
+                        return data;
                     }
                 })
-                .catch(error => alert(error));
+                .catch(error => {
+                    // eslint-disable-next-line no-alert
+                    alert(error);
+                });
             });
         });
     }
