@@ -24,6 +24,7 @@
 
 $string['allgroups'] = 'All groups';
 $string['excluderoles'] = 'Exclude roles';
+$string['exportcsv'] = 'Export CSV';
 $string['modulename'] = 'Subject attendance';
 $string['modulenameplural'] = 'Subject attendances';
 $string['modulename_help'] = 'Activity to mark attendance by subjects/topics.';

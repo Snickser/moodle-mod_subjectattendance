@@ -293,6 +293,11 @@ document.addEventListener("DOMContentLoaded", function() {
 </script>';
 }
 
-echo '<p><a href="export.php?id=' . $cm->id . '">Export CSV</a></p>';
+$url = new moodle_url('export.php', ['id' => $cm->id]);
+echo html_writer::link(
+    $url,
+    get_string('exportcsv', 'subjectattendance'),
+    ['class' => 'btn btn-secondary', 'target' => '_blank']
+);
 
 echo $OUTPUT->footer();
