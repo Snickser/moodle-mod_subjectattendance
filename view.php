@@ -43,17 +43,6 @@ $PAGE->set_heading($course->fullname);
 echo $OUTPUT->header();
 echo $OUTPUT->heading(format_string($attendance->name));
 
-echo '<style>
-.attendance-select { width: 5rem; font-weight: bold; text-align: center; color: #000; }
-.attendance-select.present { background-color: #c8e6c9; }
-.attendance-select.new     { background-color: #90caf9; }
-.attendance-select.absent  { background-color: #ffcdd2; }
-.attendance-select.partial { background-color: #fff9c4; }
-.attendance-select.none    { background-color: #ffffff; }
-.attendance-summary	   { width: 8rem; font-weight: bold; text-align: center; color: #000; display: flex;}
-.attendance-total-summary  { width: 8rem; font-weight: bold; text-align: center; color: #000; display: flex;}
-</style>';
-
 $subjects = $DB->get_records('subjectattendance_subjects', ['attendanceid' => $attendance->id], '', 'id, name');
 
 if (has_capability('mod/subjectattendance:mark', $context, $USER->id)) {
@@ -221,83 +210,15 @@ if ($sumpresent + $sumpartial + $sumabsent) {
 
 echo html_writer::table($table);
 
-if (has_capability('mod/subjectattendance:mark', $context, $USER->id)) {
-    echo '<script>
-document.addEventListener("DOMContentLoaded", function() {
-
-    function updateClass(select) {
-        let val = select.value;
-        select.classList.remove("present","partial","absent","none");
-        if (val === "2") select.classList.add("present");
-        else if (val === "1") select.classList.add("partial");
-        else if (val === "0") select.classList.add("absent");
-        else select.classList.add("none");
-    }
-
-    function updateRowSummary(row) {
-        let present = 0, partial = 0, absent = 0;
-        row.querySelectorAll(".attendance-select").forEach(function(sel) {
-            if (sel.value === "2") present++;
-            else if (sel.value === "1") partial++;
-            else if (sel.value === "0") absent++;
-        });
-        let summary = row.querySelector(".attendance-summary");
-        if (!summary) return;
-        summary.innerHTML =
-            (present ? "<div style=\'flex: 1; background: #c8e6c9;\'>" + present + "</div>" : "") +
-            (partial ? "<div style=\'flex: 1; background: #fff9c4;\'>" + partial + "</div>" : "") +
-            (absent ? "<div style=\'flex: 1; background: #ffcdd2;\'>" + absent + "</div>" : "");
-    }
-
-    document.querySelectorAll(".attendance-select").forEach(function(select) {
-        updateClass(select);
-
-        select.addEventListener("change", function() {
-            updateClass(this);
-
-            let studentid = this.dataset.studentid;
-            let subjectid = this.dataset.subjectid;
-            let cmid = this.dataset.cmid;
-            let attendanceid = this.dataset.attendanceid;
-
-            fetch("' . new moodle_url('/mod/subjectattendance/ajax_save.php') . '", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Accept": "application/json"
-                },
-                body: JSON.stringify({
-                    sesskey: "' . sesskey() . '",
-                    studentid: studentid,
-                    subjectid: subjectid,
-                    cmid: cmid,
-                    attendanceid: attendanceid,
-                    status: this.value
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (!data.success) {
-                    alert(data.error);
-                } else {
-                    let row = this.closest("tr");
-                    updateRowSummary(row);
-                }
-            })
-            .catch(error => {
-                alert(error);
-            });
-        });
-    });
-});
-</script>';
-}
-
 $url = new moodle_url('export.php', ['id' => $cm->id]);
 echo html_writer::link(
     $url,
     get_string('exportcsv', 'subjectattendance'),
     ['class' => 'btn btn-secondary', 'target' => '_blank']
 );
+
+if (has_capability('mod/subjectattendance:mark', $context, $USER->id)) {
+    $PAGE->requires->js_call_amd('mod_subjectattendance/attendance', 'init');
+}
 
 echo $OUTPUT->footer();
