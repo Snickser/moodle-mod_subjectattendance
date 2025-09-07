@@ -18,7 +18,7 @@
  * Privacy API implementation for mod_subjectattendance.
  *
  * @package    mod_subjectattendance
- * @copyright  2025 Alex Orlov
+ * @copyright  2025 Alex Orlov <snicser@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -32,11 +32,15 @@ use core_privacy\local\request\core_user_data_provider;
 
 /**
  * Privacy provider for mod_subjectattendance.
+ *
  * @package mod_subjectattendance
  */
 class provider implements core_user_data_provider, \core_privacy\local\metadata\provider {
     /**
      * Returns meta data about this plugin's data.
+     *
+     * @param collection $collection The initial collection to add items to.
+     * @return collection The updated collection with metadata added.
      */
     public static function get_metadata(collection $collection): collection {
         $collection->add_database_table(
@@ -53,6 +57,9 @@ class provider implements core_user_data_provider, \core_privacy\local\metadata\
 
     /**
      * Get all contexts where a user has data.
+     *
+     * @param int $userid The user ID to search for.
+     * @return contextlist List of contexts where the user has data.
      */
     public static function get_contexts_for_userid(int $userid): contextlist {
         global $DB;
@@ -69,6 +76,9 @@ class provider implements core_user_data_provider, \core_privacy\local\metadata\
 
     /**
      * Export all user data for the specified contexts.
+     *
+     * @param approved_contextlist $contextlist The approved contexts to export data for.
+     * @return void
      */
     public static function export_user_data(approved_contextlist $contextlist) {
         global $DB;
@@ -98,6 +108,9 @@ class provider implements core_user_data_provider, \core_privacy\local\metadata\
 
     /**
      * Delete all user data for this plugin in a context.
+     *
+     * @param \context $context The context to delete data for.
+     * @return void
      */
     public static function delete_data_for_all_users_in_context(\context $context) {
         global $DB;
@@ -106,6 +119,9 @@ class provider implements core_user_data_provider, \core_privacy\local\metadata\
 
     /**
      * Delete user data for the given approved context list.
+     *
+     * @param approved_contextlist $contextlist The approved contexts and user.
+     * @return void
      */
     public static function delete_data_for_user(approved_contextlist $contextlist) {
         global $DB;
