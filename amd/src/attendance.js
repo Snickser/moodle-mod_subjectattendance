@@ -1,9 +1,8 @@
-// mod/subjectattendance/amd/src/attendance.js
 define(['jquery'], function($) {
 
     /**
-     * Обновляет CSS-классы селекта в зависимости от значения.
-     * @param {HTMLElement} select - элемент select.
+     * Updates the CSS classes of a select element depending on its value.
+     * @param {HTMLElement} select - the select element.
      */
     function updateClass(select) {
         let val = $(select).val();
@@ -20,8 +19,8 @@ define(['jquery'], function($) {
     }
 
     /**
-     * Пересчитывает и обновляет сводку по строке таблицы.
-     * @param {HTMLElement} row - строка таблицы (tr).
+     * Recalculates and updates the summary for a table row.
+     * @param {HTMLElement} row - the table row (tr).
      */
     function updateRowSummary(row) {
         let present = 0, partial = 0, absent = 0;
@@ -46,7 +45,7 @@ define(['jquery'], function($) {
     }
 
     /**
-     * Инициализация обработчиков событий.
+     * Initializes event handlers.
      */
     function init() {
         $(".attendance-select").each(function() {
