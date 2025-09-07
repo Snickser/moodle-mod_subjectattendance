@@ -27,6 +27,7 @@ $string['excluderoles'] = 'Exclude roles';
 $string['modulename'] = 'Subject attendance';
 $string['modulenameplural'] = 'Subject attendances';
 $string['modulename_help'] = 'Activity to mark attendance by subjects/topics.';
+$string['nosubjects'] = 'No subjects';
 $string['pluginadministration'] = '';
 $string['pluginname'] = 'Subject attendance';
 $string['privacy:metadata'] = 'The subjectattendance plugin does not store any personal data.';
