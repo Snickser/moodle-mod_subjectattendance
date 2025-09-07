@@ -27,4 +27,4 @@ $plugin->component = 'mod_subjectattendance';
 $plugin->version = 2025090709;
 $plugin->requires = 2023100912;
 $plugin->maturity = MATURITY_STABLE;
-$plugin->release = 'v0.6';
+$plugin->release = 'v0.7';
