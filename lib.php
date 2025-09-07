@@ -143,6 +143,7 @@ function subjectattendance_delete_instance($id) {
 /**
  * Trigger the course_module_viewed event.
  *
+ * @param  stdClass $attendance attendance object
  * @param  stdClass $course     course object
  * @param  stdClass $cm         course module object
  * @param  stdClass $context    context object
