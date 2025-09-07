@@ -35,7 +35,7 @@ $attendance = $DB->get_record('subjectattendance', ['id' => $cm->instance], '*',
 
 $subjects = $DB->get_records('subjectattendance_subjects', ['attendanceid' => $attendance->id], 'id ASC', '*');
 if (!$subjects) {
-    throw new moodle_exception('nosubjects', 'subjectattendance');
+    throw new moodle_exception(get_string('nosubjects', 'subjectattendance'), 'subjectattendance');
 }
 
 if (has_capability('mod/subjectattendance:mark', $context, $USER->id)) {
