@@ -139,3 +139,25 @@ function subjectattendance_delete_instance($id) {
 
     return true;
 }
+
+/**
+ * Trigger the course_module_viewed event.
+ *
+ * @param  stdClass $course     course object
+ * @param  stdClass $cm         course module object
+ * @param  stdClass $context    context object
+ * @since Moodle 3.0
+ */
+function subjectattendance_view($attendance, $course, $cm, $context) {
+
+    // Trigger course_module_viewed event.
+    $params = [
+        'context' => $context,
+        'objectid' => $attendance->id,
+    ];
+
+    $event = \mod_subjectattendance\event\course_module_viewed::create($params);
+    $event->add_record_snapshot('course_modules', $cm);
+    $event->add_record_snapshot('course', $course);
+    $event->trigger();
+}
