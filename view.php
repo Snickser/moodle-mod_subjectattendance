@@ -35,6 +35,9 @@ $attendance = $DB->get_record('subjectattendance', ['id' => $cm->instance], '*',
 $context = context_module::instance($cm->id);
 require_capability('mod/subjectattendance:view', $context);
 
+// Trigger event.
+subjectattendance_view($attendance, $course, $cm, $context);
+
 $PAGE->set_context($context);
 $PAGE->set_url('/mod/subjectattendance/view.php', ['id' => $cm->id]);
 $PAGE->set_title($course->shortname . ': ' . $attendance->name);
@@ -225,8 +228,5 @@ echo html_writer::link(
 if (has_capability('mod/subjectattendance:mark', $context, $USER->id)) {
     $PAGE->requires->js_call_amd('mod_subjectattendance/attendance', 'init');
 }
-
-// Completion and trigger events.
-subjectattendance_view($attendance, $course, $cm, $context);
 
 echo $OUTPUT->footer();
