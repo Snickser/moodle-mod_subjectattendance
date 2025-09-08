@@ -214,7 +214,7 @@ foreach ($students as $student) {
     $table->data[] = $row;
 }
 
-if ($sumpresent + $sumpartial + $sumabsent) {
+if (($sumpresent + $sumpartial + $sumabsent) && has_capability('mod/subjectattendance:mark', $context, $USER->id)) {
     $summ = get_string('total') . '<div class="attendance-total-summary">' .
     ($sumpresent ? "<div style='flex: 1; background: #c8e6c9;'>$sumpresent</div>" : null) .
     ($sumpartial ? "<div style='flex: 1; background: #fff9c4;'>$sumpartial</div>" : null) .

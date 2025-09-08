@@ -58,6 +58,17 @@ foreach ($logs as $log) {
     $logmap[$log->userid][$log->subjectid] = $log->status;
 }
 
+$event = \mod_subjectattendance\event\attendance_exported::create([
+    'context' => $context,
+    'objectid' => $attendance->id,
+    'userid' => $USER->id,
+    'other' => [
+        'cmid' => $cm->id,
+        'filename' => "subjectattendance_{$attendance->id}.csv",
+    ],
+]);
+$event->trigger();
+
 header('Content-Type: text/csv; charset=utf-8');
 header('Content-Disposition: attachment; filename="subjectattendance_' . $attendance->id . '.csv"');
 echo "\xEF\xBB\xBF";

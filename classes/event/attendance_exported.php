@@ -1,5 +1,5 @@
 <?php
-// This file is part of Moodle - https://moodle.org/
+// This file is part of Moodle - https://moodle.org/.
 //
 // Moodle is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -15,29 +15,35 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Event class for attendance.
+ * Event class for attendance CSV export.
  *
- * @package    mod_subjectattendance
- * @copyright  2013 Alex Orlov <snickser@gmail.com>
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     mod_subjectattendance
+ * @category    event
+ * @copyright   2025 Alex Orlov
+ * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace mod_subjectattendance\event;
 
 /**
- * Event triggered when a student's attendance is marked via AJAX.
+ * Event triggered when attendance data is exported to CSV.
  *
- * @package    mod_subjectattendance
+ * This event is fired when a user downloads attendance data
+ * from the module `subjectattendance` as a CSV file.
+ *
+ * @package     mod_subjectattendance
+ * @category    event
+ * @since       Moodle 5.0
  */
-class attendance_marked extends \core\event\base {
+class attendance_exported extends \core\event\base {
     /**
      * Init method to set basic properties.
      *
      * @return void
      */
     protected function init() {
-        $this->data['crud'] = 'u';
-        $this->data['edulevel'] = self::LEVEL_TEACHING;
+        $this->data['crud'] = 'r';
+        $this->data['edulevel'] = self::LEVEL_PARTICIPATING;
         $this->data['objecttable'] = 'subjectattendance_log';
     }
 
@@ -47,7 +53,7 @@ class attendance_marked extends \core\event\base {
      * @return string
      */
     public static function get_name() {
-        return get_string('eventattendance_marked', 'mod_subjectattendance');
+        return get_string('eventattendance_exported', 'mod_subjectattendance');
     }
 
     /**
@@ -56,10 +62,8 @@ class attendance_marked extends \core\event\base {
      * @return string
      */
     public function get_description() {
-        return "The user with id '{$this->userid}' marked attendance "
-             . "for student with id '{$this->relateduserid}' "
-             . "in subject '{$this->other['subjectid']}' "
-             . "with status '{$this->other['status']}'.";
+        return "The user with id '{$this->userid}' exported attendance data to CSV "
+             . "for activity with id '{$this->objectid}' in course '{$this->courseid}'.";
     }
 
     /**
