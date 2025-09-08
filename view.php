@@ -35,8 +35,15 @@ $attendance = $DB->get_record('subjectattendance', ['id' => $cm->instance], '*',
 $context = context_module::instance($cm->id);
 require_capability('mod/subjectattendance:view', $context);
 
-// Trigger event.
-subjectattendance_view($attendance, $course, $cm, $context);
+// Trigger course_module_viewed event.
+$params = [
+    'context' => $context,
+    'objectid' => $attendance->id,
+];
+$event = \mod_subjectattendance\event\course_module_viewed::create($params);
+$event->add_record_snapshot('course_modules', $cm);
+$event->add_record_snapshot('course', $course);
+$event->trigger();
 
 $PAGE->set_context($context);
 $PAGE->set_url('/mod/subjectattendance/view.php', ['id' => $cm->id]);

@@ -82,4 +82,16 @@ if ($log) {
     ]);
 }
 
+$event = \mod_subjectattendance\event\attendance_marked::create([
+    'context' => $context,
+    'objectid' => $attendanceid,
+    'userid' => $USER->id,
+    'relateduserid' => $studentid,
+    'other' => [
+        'subjectid' => $subjectid,
+        'status'    => $status ? $status : 0,
+    ],
+]);
+$event->trigger();
+
 echo json_encode(['success' => true]);

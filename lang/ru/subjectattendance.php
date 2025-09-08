@@ -24,6 +24,7 @@
 
 $string['absent'] = 'Отсутствовал';
 $string['allgroups'] = 'Все группы';
+$string['eventattendance_marked'] = 'Посещаемость отмечена';
 $string['excluderoles'] = 'Исключать роли';
 $string['excused'] = 'Уважительная причина';
 $string['modulename'] = 'Посещаемость по предметам';

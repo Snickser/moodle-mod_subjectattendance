@@ -23,6 +23,7 @@
  */
 
 $string['allgroups'] = 'All groups';
+$string['eventattendance_marked'] = 'Attendance marked';
 $string['excluderoles'] = 'Exclude roles';
 $string['exportcsv'] = 'Export CSV';
 $string['modulename'] = 'Subject attendance';
