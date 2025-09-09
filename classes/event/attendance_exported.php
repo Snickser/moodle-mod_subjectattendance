@@ -33,7 +33,6 @@ namespace mod_subjectattendance\event;
  *
  * @package     mod_subjectattendance
  * @category    event
- * @since       Moodle 5.0
  */
 class attendance_exported extends \core\event\base {
     /**
@@ -44,7 +43,7 @@ class attendance_exported extends \core\event\base {
     protected function init() {
         $this->data['crud'] = 'r';
         $this->data['edulevel'] = self::LEVEL_PARTICIPATING;
-        $this->data['objecttable'] = 'subjectattendance_log';
+        $this->data['objecttable'] = 'subjectattendance';
     }
 
     /**
