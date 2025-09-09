@@ -87,6 +87,12 @@ if (has_capability('mod/subjectattendance:mark', $context, $USER->id)) {
     $students[] = $USER;
 }
 
+usort($students, function ($a, $b) {
+    $namea = strtolower($a->firstname . ' ' . $a->lastname);
+    $nameb = strtolower($b->firstname . ' ' . $b->lastname);
+    return strcmp($namea, $nameb);
+});
+
 $subjectids = array_keys($subjects);
 $logs = $DB->get_records_list('subjectattendance_log', 'subjectid', $subjectids);
 $logmap = [];
