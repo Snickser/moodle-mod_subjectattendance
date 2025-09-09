@@ -134,7 +134,7 @@ $table->head = array_merge(
     }, $subjects),
     [get_string('stats')]
 );
-$table->attributes['class'] = 'generaltable table-sm';
+$table->attributes['class'] = 'table generaltable table-sm attendance-table';
 
 $sumabsent = 0;
 $sumpresent = 0;
