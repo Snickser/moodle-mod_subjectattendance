@@ -97,6 +97,15 @@ define(['jquery'], function($) {
                 });
             });
         });
+
+        $(".attendance-col-select").on("change", function() {
+            let subjectid = $(this).data("subjectid");
+            let value = $(this).val();
+
+            $(".attendance-select[data-subjectid='" + subjectid + "']").each(function() {
+                $(this).val(value).trigger("change");
+            });
+        });
     }
 
     return {init: init};

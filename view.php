@@ -97,8 +97,38 @@ foreach ($logs as $l) {
     $logmap[$l->userid][$l->subjectid] = $l->status;
 }
 
+$displayoptions = [
+    0 => ['' => '', 0 => '✖', 1 => '⭘', 2 => '✔'],
+    1 => ['' => '', 0 => '❌', 1 => '⚠️', 2 => '✅'],
+    2 => ['' => '', 0 => '🟥', 1 => '🟨', 2 => '🟩'],
+    3 => ['' => '', 0 => '🔴', 1 => '🟡', 2 => '🟢'],
+    4 => ['' => '', 0 => '🥉', 1 => '🥈', 2 => '🥇'],
+    5 => ['' => '', 0 => '🚷', 1 => '♿', 2 => '💯'],
+    6 => ['' => '', 0 => '2', 1 => '3', 2 => '5'],
+];
+$options = isset($displayoptions[$attendance->types]) ? $displayoptions[$attendance->types] : $displayoptions[0];
+
 $table = new html_table();
-$table->head = array_merge([get_string('fullname')], array_map(fn($s) => $s->name, $subjects), [get_string('stats')]);
+$table->head = array_merge(
+    [get_string('fullname')],
+    array_map(function ($s) use ($attendance, $cm, $options) {
+        $headerselect = html_writer::select(
+            $options,
+            'colselect[' . $s->id . ']',
+            '',
+            null,
+            [
+                'class' => 'attendance-col-select',
+                'data-subjectid' => $s->id,
+                'data-cmid' => $cm->id,
+                'data-attendanceid' => $attendance->id,
+            ]
+        );
+
+        return $s->name . '&nbsp;' . $headerselect;
+    }, $subjects),
+    [get_string('stats')]
+);
 $table->attributes['class'] = 'generaltable';
 
 $sumabsent = 0;
@@ -138,53 +168,9 @@ foreach ($students as $student) {
             $class .= ' none';
         }
 
-        $options = [
-        0 => [
-            ''  => '',
-            0   => '✖',
-            1   => '⭘',
-        2   => '✔',
-        ],
-        1 => [
-            ''  => '',
-            0   => '❌',
-            1   => '⚠️',
-            2   => '✅',
-        ],
-        2 => [
-            ''  => '',
-            0   => '🟥',
-            1   => '🟨',
-            2   => '🟩',
-        ],
-        3 => [
-            ''  => '',
-            0   => '🔴',
-            1   => '🟡',
-            2   => '🟢',
-        ],
-        4 => [
-            ''  => '',
-            0   => '🥉',
-            1   => '🥈',
-            2   => '🥇',
-            ],
-        5 => [
-            ''  => '',
-            0   => '🚷',
-            1   => '♿',
-            2   => '💯',
-            ],
-        6 => [
-            ''  => '',
-            0   => '2',
-            1   => '3',
-            2   => '5',
-            ],
-        ];
         if (has_capability('mod/subjectattendance:mark', $context, $USER->id)) {
             $row[] = html_writer::select(
-                $options[$attendance->types],
+                $displayoptions[$attendance->types],
                 $name,
                 $status === null ? '' : (string)$status,
                 null,
@@ -197,7 +183,7 @@ foreach ($students as $student) {
                 ]
             );
         } else {
-            $row[] = html_writer::tag('div', $options[$attendance->types][$status], ['class' => $class]);
+            $row[] = html_writer::tag('div', $displayoptions[$attendance->types][$status], ['class' => $class]);
         }
     }
 
