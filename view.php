@@ -130,7 +130,6 @@ $table->head = array_merge(
                 'data-attendanceid' => $attendance->id,
             ]
         );
-
         return $s->name . '&nbsp;' . $headerselect;
     }, $subjects),
     [get_string('stats')]
@@ -150,7 +149,8 @@ foreach ($students as $student) {
         }
     }
 
-    $row = [fullname($student)];
+    $url = new moodle_url('/user/profile.php', ['id' => $student->id]);
+    $row = [html_writer::link($url, fullname($student))];
 
     $countabsent = 0;
     $countpresent = 0;
