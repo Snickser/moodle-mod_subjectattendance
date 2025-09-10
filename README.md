@@ -8,4 +8,4 @@ In the list of students, the teacher marks one of three states (red, yellow, gre
 The list of topics is set in the settings and can be expanded and deleted.
 
 *****
-<img width="1053" height="764" alt="изображение" src="https://github.com/user-attachments/assets/515e4f0b-fd6c-46ff-bcfd-1f18728eee55" />
+<img width="1155" height="745" alt="изображение" src="https://github.com/user-attachments/assets/73b3a156-385d-4dac-8566-ccf84f4074d4" />
