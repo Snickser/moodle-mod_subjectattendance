@@ -28,8 +28,8 @@ $string['eventattendance_exported'] = 'Посещаемость экспорти
 $string['eventattendance_marked'] = 'Посещаемость отмечена';
 $string['excluderoles'] = 'Исключать роли';
 $string['excused'] = 'Уважительная причина';
-$string['messagebody'] = '{$a->status} {$a->firstname}, уведомляем об отметке посещаемости
-в «{$a->field}»
+$string['messagebody'] = '{$a->status} {$a->firstname}, уведомляем об отметке посещаемости.
+«{$a->field}»
 {$a->url}';
 $string['messageprovider:subjectattendance_receipt'] = 'Уведомления посещаемости';
 $string['messagesubject'] = 'Уведомление об изменении в табеле посещаемости';
