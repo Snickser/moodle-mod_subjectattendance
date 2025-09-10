@@ -74,10 +74,22 @@ if (has_capability('mod/subjectattendance:mark', $context, $USER->id)) {
         foreach ($allgroups as $gid => $g) {
             $groupoptions[$gid] = $g->name;
         }
-        echo '<form method="get">';
+
+        echo '<div class="d-flex align-items-center gap-2 mb-2">';
+
+        echo '<form method="get" class="d-flex align-items-center gap-2 mr-2">';
         echo '<input type="hidden" name="id" value="' . $cm->id . '">';
         echo html_writer::select($groupoptions, 'group', $selectedgroup, false, ['onchange' => 'this.form.submit();']);
-        echo '</form><br>';
+        echo '</form>';
+
+        $url = new moodle_url('view.php', ['id' => $cm->id]);
+        echo html_writer::link(
+            $url,
+            get_string('reload', 'core'),
+            ['class' => 'btn btn-primary'],
+        );
+
+        echo '</div>';
     }
 
     if ($selectedgroup && $selectedgroup != 0) {
@@ -88,6 +100,7 @@ if (has_capability('mod/subjectattendance:mark', $context, $USER->id)) {
 } else {
     $students[] = $USER;
 }
+
 
 usort($students, function ($a, $b) {
     $namea = strtolower($a->firstname . ' ' . $a->lastname);
