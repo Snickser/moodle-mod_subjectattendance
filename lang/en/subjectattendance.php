@@ -27,10 +27,17 @@ $string['eventattendance_exported'] = 'Attendance exported to CSV';
 $string['eventattendance_marked'] = 'Attendance marked';
 $string['excluderoles'] = 'Exclude roles';
 $string['exportcsv'] = 'Export CSV';
+$string['messageprovider:subjectattendance_receipt'] = 'Subject attendance receipt';
+$string['messagebody'] = 'Hello {$a->firstname}! The attendance sheet has a mark
+{$a->url}
+';
+$string['messagesubject'] = 'Subject attendance notify';
 $string['modulename'] = 'Subject attendance';
 $string['modulename_help'] = 'Activity to mark attendance by subjects/topics.';
 $string['modulenameplural'] = 'Subject attendances';
 $string['nosubjects'] = 'No subjects';
+$string['notify'] = 'Notify students';
+$string['notify_help'] = 'Notifications to students about the assigned status are enabled, and their different options. Notify only for reds, for reds and yellows, and for all.';
 $string['pluginadministration'] = '';
 $string['pluginname'] = 'Subject attendance';
 $string['privacy:metadata:log'] = 'User attendance';

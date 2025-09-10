@@ -28,9 +28,15 @@ $string['eventattendance_exported'] = 'Посещаемость экспорти
 $string['eventattendance_marked'] = 'Посещаемость отмечена';
 $string['excluderoles'] = 'Исключать роли';
 $string['excused'] = 'Уважительная причина';
+$string['messagebody'] = '{$a->status} {$a->fullname}, уведомляем об отметке посещаемости.
+{$a->url}';
+$string['messageprovider:subjectattendance_receipt'] = 'Уведомления посещаемости';
+$string['messagesubject'] = 'Уведомление об изменении в табеле посещаемости';
 $string['modulename'] = 'Посещаемость по предметам';
 $string['modulename_help'] = 'Модуль для отметки посещаемости по заранее заданным предметам/темам.';
 $string['modulenameplural'] = 'Посещаемости по предметам';
+$string['notify'] = 'Уведомлять студентов';
+$string['notify_help'] = 'Включаются уведомления студентов о проставленном статусе, и их разные варианты. Уведомлять только для красных, для красных и жёлтых, и для всех.';
 $string['pluginname'] = 'Посещаемость по предметам';
 $string['present'] = 'Присутствовал';
 $string['save'] = 'Сохранить';

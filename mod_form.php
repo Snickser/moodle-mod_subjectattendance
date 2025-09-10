@@ -93,6 +93,20 @@ class mod_subjectattendance_mod_form extends moodleform_mod {
             ['size' => 8]
         );
 
+        $options = [
+        0 => get_string('no', 'core'),
+        1 => get_string('always', 'core'),
+        2 => get_string('toonly', 'core', '❌ ⚠'),
+        3 => get_string('toonly', 'core', '❌'),
+        ];
+        $select = $mform->addElement(
+            'select',
+            'notify',
+            get_string('notify', 'subjectattendance'),
+            $options,
+        );
+        $mform->addHelpButton('notify', 'notify', 'subjectattendance');
+
         $this->standard_coursemodule_elements();
         $this->add_action_buttons();
     }

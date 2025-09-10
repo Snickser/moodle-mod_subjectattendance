@@ -22,7 +22,11 @@
  * @license     https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use mod_subjectattendance\notifications;
+
 require_once('../../config.php');
+require_once("$CFG->dirroot/mod/subjectattendance/lib.php");
+
 require_login();
 header('Content-Type: application/json');
 
@@ -51,6 +55,7 @@ $cm = get_coursemodule_from_id('subjectattendance', $cmid, 0, false, MUST_EXIST)
 $context = context_module::instance($cm->id);
 require_capability('mod/subjectattendance:mark', $context);
 
+$attendance = $DB->get_record('subjectattendance', ['id' => $cm->instance], '*', MUST_EXIST);
 $courseid = $cm->course;
 $accessallgroups = has_capability('moodle/site:accessallgroups', $context);
 
@@ -93,5 +98,19 @@ $event = \mod_subjectattendance\event\attendance_marked::create([
     ],
 ]);
 $event->trigger();
+
+// Notify user.
+$options = ['' => '', 0 => '❌', 1 => '⚠️', 2 => '✅'];
+
+if (
+    $attendance->notify == 1 || ($attendance->notify == 3 && $status == 0) ||
+    ($attendance->notify == 2 && $status < 2)
+) {
+    notifications::notify(
+        $studentid,
+        $cm->id,
+        $options[$status],
+    );
+}
 
 echo json_encode(['success' => true]);
