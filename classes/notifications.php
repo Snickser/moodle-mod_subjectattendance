@@ -58,7 +58,7 @@ class notifications {
             'firstname' => $user->firstname,
             'fullname'  => fullname($user),
             'url'       => new \moodle_url($CFG->wwwroot . '/mod/subjectattendance/view.php', ['id' => $cmid]),
-            'field' 	=> $field,
+            'field'     => $field,
             'status'    => $status,
         ];
 
