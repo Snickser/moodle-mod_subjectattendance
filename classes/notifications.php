@@ -40,7 +40,8 @@ class notifications {
      *
      * @param int $userid
      * @param int $cmid
-     * @param int $status
+     * @param string $field
+     * @param string $status
      * @return int|false
      */
     public static function notify($userid, $cmid, $field = null, $status = null) {
@@ -57,8 +58,8 @@ class notifications {
             'firstname' => $user->firstname,
             'fullname'  => fullname($user),
             'url'       => new \moodle_url($CFG->wwwroot . '/mod/subjectattendance/view.php', ['id' => $cmid]),
+            'field' 	=> $field,
             'status'    => $status,
-            'field' => $field,
         ];
 
         $message = new \core\message\message();
