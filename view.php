@@ -49,6 +49,8 @@ $PAGE->set_context($context);
 $PAGE->set_url('/mod/subjectattendance/view.php', ['id' => $cm->id]);
 $PAGE->set_title($course->shortname . ': ' . $attendance->name);
 $PAGE->set_heading($course->fullname);
+$PAGE->add_body_class('limitedwidth');
+$PAGE->set_cacheable(false);
 
 echo $OUTPUT->header();
 echo $OUTPUT->heading(format_string($attendance->name));
@@ -226,6 +228,7 @@ echo html_writer::link(
 
 if (has_capability('mod/subjectattendance:mark', $context, $USER->id)) {
     $PAGE->requires->js_call_amd('mod_subjectattendance/attendance', 'init');
+    $PAGE->requires->strings_for_js(['apply', 'cancel'], 'core');
 }
 
 echo $OUTPUT->footer();

@@ -98,15 +98,39 @@ define(['jquery'], function($) {
             });
         });
 
-        $(".attendance-col-select").on("change", function() {
+        // Массовый select с защитой
+        $(document).on("change", ".attendance-col-select", function() {
             let subjectid = $(this).data("subjectid");
             let value = $(this).val();
+            let $self = $(this);
 
-            $(".attendance-select[data-subjectid='" + subjectid + "']").each(function() {
-                $(this).val(value).trigger("change");
-            });
+            // Добавляем панель подтверждения, если её ещё нет
+            if (!$self.next(".mass-apply-confirm").length) {
+                let $panel = $(`
+                    <span class="mass-apply-confirm" style="margin-left:8px;">
+                        <button type="button" class="btn btn-warning btn-sm mt-2 apply">
+                        ${M.str.core.apply}</button>
+                        <button type="button" class="btn btn-secondary btn-sm mt-2 cancel">
+                        ${M.str.core.cancel}</button>
+                    </span>
+                `);
+                $self.after($panel);
+
+                $panel.find(".apply").on("click", function() {
+                    $(".attendance-select[data-subjectid='" + subjectid + "']").each(function() {
+                        $(this).val(value).trigger("change");
+                    });
+                    $panel.remove();
+                });
+
+                $panel.find(".cancel").on("click", function() {
+                    $self.val(""); // сброс
+                    $panel.remove();
+                });
+            }
         });
-    }
+
+}
 
     return {init: init};
 });
