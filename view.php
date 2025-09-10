@@ -76,19 +76,11 @@ if (has_capability('mod/subjectattendance:mark', $context, $USER->id)) {
         }
 
         echo '<div class="d-flex align-items-center gap-2 mb-2">';
-
-        echo '<form method="get" class="d-flex align-items-center gap-2 mr-2">';
+        echo '<form method="get" class="d-flex align-items-center gap-2">';
         echo '<input type="hidden" name="id" value="' . $cm->id . '">';
         echo html_writer::select($groupoptions, 'group', $selectedgroup, false, ['onchange' => 'this.form.submit();']);
+        echo '<input type="submit" class="btn btn-primary ml-2" value=' . get_string('reload', 'core') . '>';
         echo '</form>';
-
-        $url = new moodle_url('view.php', ['id' => $cm->id]);
-        echo html_writer::link(
-            $url,
-            get_string('reload', 'core'),
-            ['class' => 'btn btn-primary'],
-        );
-
         echo '</div>';
     }
 
