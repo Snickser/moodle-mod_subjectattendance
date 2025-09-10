@@ -28,7 +28,7 @@ $string['eventattendance_marked'] = 'Attendance marked';
 $string['excluderoles'] = 'Exclude roles';
 $string['exportcsv'] = 'Export CSV';
 $string['messageprovider:subjectattendance_receipt'] = 'Subject attendance receipt';
-$string['messagebody'] = 'Hello {$a->firstname}! The attendance sheet has a mark
+$string['messagebody'] = 'Hello {$a->firstname}! The attendance sheet has a mark {$a->status}
 {$a->url}
 ';
 $string['messagesubject'] = 'Subject attendance notify';
