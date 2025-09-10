@@ -49,7 +49,6 @@ $PAGE->set_context($context);
 $PAGE->set_url('/mod/subjectattendance/view.php', ['id' => $cm->id]);
 $PAGE->set_title($course->shortname . ': ' . $attendance->name);
 $PAGE->set_heading($course->fullname);
-$PAGE->add_body_class('limitedwidth');
 $PAGE->set_cacheable(false);
 
 echo $OUTPUT->header();
