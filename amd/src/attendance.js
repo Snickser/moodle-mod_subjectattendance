@@ -98,20 +98,18 @@ define(['jquery'], function($) {
             });
         });
 
-        // Массовый select с защитой
         $(document).on("change", ".attendance-col-select", function() {
             let subjectid = $(this).data("subjectid");
             let value = $(this).val();
             let $self = $(this);
 
-            // Добавляем панель подтверждения, если её ещё нет
             if (!$self.next(".mass-apply-confirm").length) {
                 let $panel = $(`
                     <span class="mass-apply-confirm" style="margin-left:8px;">
                         <button type="button" class="btn btn-warning btn-sm mt-2 apply">
-                        ${M.str.core.apply}</button>
+                        ${M.util.get_string('apply', 'core')}</button>
                         <button type="button" class="btn btn-secondary btn-sm mt-2 cancel">
-                        ${M.str.core.cancel}</button>
+                        ${M.util.get_string('cancel', 'core')}</button>
                     </span>
                 `);
                 $self.after($panel);
@@ -124,13 +122,12 @@ define(['jquery'], function($) {
                 });
 
                 $panel.find(".cancel").on("click", function() {
-                    $self.val(""); // сброс
+                    $self.val("");
                     $panel.remove();
                 });
             }
         });
-
-}
+    }
 
     return {init: init};
 });
