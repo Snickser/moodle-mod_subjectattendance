@@ -39,12 +39,14 @@ class notifications {
      * or false in case of error.
      *
      * @param int $userid
+     * @param string $course
      * @param int $cmid
+     * @param string $name
      * @param string $field
      * @param string $status
      * @return int|false
      */
-    public static function notify($userid, $cmid, $field = null, $status = null) {
+    public static function notify($userid, $course, $cmid, $name, $field = null, $status = null) {
         global $DB, $CFG;
 
         // Get the user object for messaging and fullname.
@@ -58,6 +60,8 @@ class notifications {
             'firstname' => $user->firstname,
             'fullname'  => fullname($user),
             'url'       => new \moodle_url($CFG->wwwroot . '/mod/subjectattendance/view.php', ['id' => $cmid]),
+            'course'    => $course,
+            'name'      => $name,
             'field'     => $field,
             'status'    => $status,
         ];

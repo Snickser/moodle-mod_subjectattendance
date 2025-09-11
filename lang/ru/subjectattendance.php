@@ -29,8 +29,8 @@ $string['eventattendance_marked'] = 'Посещаемость отмечена';
 $string['excluderoles'] = 'Исключать роли';
 $string['excused'] = 'Уважительная причина';
 $string['messagebody'] = '{$a->status} {$a->firstname}, уведомляем об отметке посещаемости.
-«{$a->field}»
-{$a->url}';
+В курсе <a href="{$a->url}">«{$a->course}» - {$a->name}</a>
+Тема «{$a->field}»';
 $string['messageprovider:subjectattendance_receipt'] = 'Уведомления посещаемости';
 $string['messagesubject'] = 'Уведомление об изменении в табеле посещаемости';
 $string['modulename'] = 'Посещаемость по предметам';

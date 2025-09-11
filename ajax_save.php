@@ -57,8 +57,9 @@ require_capability('mod/subjectattendance:mark', $context);
 
 $attendance = $DB->get_record('subjectattendance', ['id' => $cm->instance], '*', MUST_EXIST);
 $field = $DB->get_record('subjectattendance_subjects', ['id' => $subjectid]);
+$course = get_course($cm->course);
 
-$courseid = $cm->course;
+$courseid = $course->id;
 $accessallgroups = has_capability('moodle/site:accessallgroups', $context);
 
 if (!$accessallgroups) {
@@ -111,8 +112,10 @@ if (
 ) {
     notifications::notify(
         $studentid,
+        format_string($course->fullname, true, ['context' => $context]),
         $cm->id,
-        $field->name,
+        format_string($cm->name, true, ['context' => $context]),
+        format_string($field->name, true, ['context' => $context]),
         $options[$status],
     );
 }

@@ -55,6 +55,9 @@ echo $OUTPUT->header();
 echo $OUTPUT->heading(format_string($attendance->name));
 
 $subjects = $DB->get_records('subjectattendance_subjects', ['attendanceid' => $attendance->id], '', 'id, name');
+foreach ($subjects as $id => $subject) {
+    $subjects[$id]->name = format_string($subject->name, true, ['context' => $context]);
+}
 
 if (has_capability('mod/subjectattendance:mark', $context, $USER->id)) {
     if (is_siteadmin()) {
@@ -91,7 +94,6 @@ if (has_capability('mod/subjectattendance:mark', $context, $USER->id)) {
 } else {
     $students[] = $USER;
 }
-
 
 usort($students, function ($a, $b) {
     $namea = strtolower($a->firstname . ' ' . $a->lastname);

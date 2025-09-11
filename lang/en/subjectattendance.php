@@ -27,11 +27,11 @@ $string['eventattendance_exported'] = 'Attendance exported to CSV';
 $string['eventattendance_marked'] = 'Attendance marked';
 $string['excluderoles'] = 'Exclude roles';
 $string['exportcsv'] = 'Export CSV';
-$string['messageprovider:subjectattendance_receipt'] = 'Subject attendance receipt';
 $string['messagebody'] = 'Hello {$a->firstname}! The attendance sheet has a mark {$a->status}
 in {$a->field}
 {$a->url}
 ';
+$string['messageprovider:subjectattendance_receipt'] = 'Subject attendance receipt';
 $string['messagesubject'] = 'Subject attendance notify';
 $string['modulename'] = 'Subject attendance';
 $string['modulename_help'] = 'Activity to mark attendance by subjects/topics.';
