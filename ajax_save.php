@@ -103,6 +103,7 @@ $event = \mod_subjectattendance\event\attendance_marked::create([
 $event->trigger();
 
 // Notify user.
+$user = $DB->get_record('user', ['id' => $studentid], '*', MUST_EXIST);
 $options = ['' => '', 0 => '❌', 1 => '⚠️', 2 => '✅'];
 
 if (
@@ -110,6 +111,7 @@ if (
     ($attendance->notify == 3 && $status === 0) ||
     ($attendance->notify == 2 && $status <= 2 && $status !== null)
 ) {
+    $oldforcelang = force_current_language($user->lang);
     notifications::notify(
         $studentid,
         format_string($course->fullname, true, ['context' => $context]),
@@ -118,6 +120,7 @@ if (
         format_string($field->name, true, ['context' => $context]),
         $options[$status],
     );
+    force_current_language($oldforcelang);
 }
 
 echo json_encode(['success' => true]);
