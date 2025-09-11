@@ -103,7 +103,7 @@ $event = \mod_subjectattendance\event\attendance_marked::create([
 $event->trigger();
 
 // Notify user.
-$user = $DB->get_record('user', ['id' => $studentid], '*', MUST_EXIST);
+$user = $DB->get_record('user', ['id' => $studentid], 'lang', MUST_EXIST);
 $options = ['' => '', 0 => '❌', 1 => '⚠️', 2 => '✅'];
 
 if (

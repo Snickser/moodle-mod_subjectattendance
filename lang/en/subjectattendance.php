@@ -28,9 +28,8 @@ $string['eventattendance_marked'] = 'Attendance marked';
 $string['excluderoles'] = 'Exclude roles';
 $string['exportcsv'] = 'Export CSV';
 $string['messagebody'] = 'Hello {$a->firstname}! The attendance sheet has a mark {$a->status}
-in {$a->field}
-{$a->url}
-';
+In course <a href="{$a->url}">«{$a->course}» - {$a->name}</a>
+Topic «{$a->field}»';
 $string['messageprovider:subjectattendance_receipt'] = 'Subject attendance receipt';
 $string['messagesubject'] = 'Subject attendance notify';
 $string['modulename'] = 'Subject attendance';
