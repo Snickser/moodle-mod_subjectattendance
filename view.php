@@ -77,7 +77,7 @@ if (has_capability('mod/subjectattendance:mark', $context, $USER->id)) {
             $groupoptions[$gid] = $g->name;
         }
 
-        echo '<div class="d-flex align-items-center gap-2 mb-2">';
+        echo '<div class="gap-2 mb-2">';
         echo '<form method="get" class="d-flex align-items-center gap-2">';
         echo '<input type="hidden" name="id" value="' . $cm->id . '">';
         echo html_writer::select($groupoptions, 'group', $selectedgroup, false, ['onchange' => 'this.form.submit();']);
@@ -120,7 +120,7 @@ $displayoptions = [
     5 => ['' => '', 0 => '🚷', 1 => '♿', 2 => '💯'],
     6 => ['' => '', 0 => '2', 1 => '3', 2 => '5'],
 ];
-$options = isset($displayoptions[$attendance->types]) ? $displayoptions[$attendance->types] : $displayoptions[0];
+$options = isset($displayoptions[$attendance->types]) ? $displayoptions[$attendance->types] : $displayoptions[1];
 
 $table = new html_table();
 $table->head = array_merge(
