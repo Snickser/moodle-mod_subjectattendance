@@ -37,6 +37,9 @@ $subjects = $DB->get_records('subjectattendance_subjects', ['attendanceid' => $a
 if (!$subjects) {
     throw new moodle_exception(get_string('nosubjects', 'subjectattendance'), 'subjectattendance');
 }
+foreach ($subjects as $id => $subject) {
+    $subjects[$id]->name = format_string($subject->name, true, ['context' => $context]);
+}
 
 if (has_capability('mod/subjectattendance:mark', $context, $USER->id)) {
     $students = get_enrolled_users($context);
