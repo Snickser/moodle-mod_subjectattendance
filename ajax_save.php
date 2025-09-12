@@ -109,7 +109,7 @@ $options = ['' => '', 0 => '❌', 1 => '⚠️', 2 => '✅'];
 if (
     ($attendance->notify == 1 && $status !== null) ||
     ($attendance->notify == 3 && $status === 0) ||
-    ($attendance->notify == 2 && $status <= 2 && $status !== null)
+    ($attendance->notify == 2 && $status < 2 && $status !== null)
 ) {
     $oldforcelang = force_current_language($user->lang);
     notifications::notify(
