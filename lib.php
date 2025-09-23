@@ -139,3 +139,20 @@ function subjectattendance_delete_instance($id) {
 
     return true;
 }
+
+function get_displayoption($type = 0, $status = '') {
+    $displayoptions = [
+    0 => ['' => '', 0 => '✖', 1 => '⭘', 2 => '✔'],
+    1 => ['' => '', 0 => '❌', 1 => '⚠️', 2 => '✅'],
+    2 => ['' => '', 0 => '🟥 ', 1 => '🟨 ', 2 => '🟩 '],
+    3 => ['' => '', 0 => '🔴', 1 => '🟡 ', 2 => '🟢 '],
+    4 => ['' => '', 0 => '🥉', 1 => '🥈', 2 => '🥇'],
+    5 => ['' => '', 0 => '🚷', 1 => '♿', 2 => '💯'],
+    6 => ['' => '', 0 => '2', 1 => '3', 2 => '5'],
+    ];
+    if (isset($displayoptions[$type][$status])) {
+        return $displayoptions[$type][$status];
+    } else {
+        return false;
+    }
+}

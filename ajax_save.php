@@ -25,6 +25,10 @@
 use mod_subjectattendance\notifications;
 
 require_once('../../config.php');
+
+$CFG->debug = DEBUG_NONE;
+$CFG->debugdisplay = 0;
+
 require_once("$CFG->dirroot/mod/subjectattendance/lib.php");
 
 require_login();
