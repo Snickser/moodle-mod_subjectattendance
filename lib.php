@@ -140,6 +140,13 @@ function subjectattendance_delete_instance($id) {
     return true;
 }
 
+/**
+ * Returns a display option symbol based on the given type and status.
+ *
+ * @param int $type   Display type (0–6). Defaults to 0.
+ * @param string|int $status Status key (''|0|1|2). Empty string or integer value.
+ * @return string|false The corresponding symbol if found, or false if not defined.
+ */
 function get_displayoption($type = 0, $status = '') {
     $displayoptions = [
     0 => ['' => '', 0 => '✖', 1 => '⭘', 2 => '✔'],
