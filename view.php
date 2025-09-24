@@ -142,7 +142,8 @@ $table->head = array_merge(
     }, $subjects),
     [get_string('stats')]
 );
-$table->attributes['class'] = 'table generaltable table-sm attendance-table';
+
+$table->attributes['class'] = 'table generaltable table-sm attendance-table table-sticky first-column-sticky';
 
 $sumabsent = 0;
 $sumpresent = 0;
@@ -201,10 +202,14 @@ foreach ($students as $student) {
         }
     }
 
+    $sumuser = $countpresent + $countpartial + $countabsent;
     $row[] = '<div class="attendance-summary">' .
-    ($countpresent ? "<div style='flex: 1; background: #c8e6c9;'>$countpresent</div>" : null) .
-    ($countpartial ? "<div style='flex: 1; background: #fff9c4;'>$countpartial</div>" : null) .
-    ($countabsent ? "<div style='flex: 1; background: #ffcdd2;'>$countabsent</div>" : null) .
+    ($countpresent ? "<div style='flex: 1; background: #c8e6c9;'>{$countpresent} (" .
+    round($countpresent / $sumuser * 100) . "%)</div>" : null) .
+    ($countpartial ? "<div style='flex: 1; background: #fff9c4;'>{$countpartial} (" .
+    round($countpartial / $sumuser * 100) . "%)</div>" : null) .
+    ($countabsent ? "<div style='flex: 1; background: #ffcdd2;'>{$countabsent} (" .
+    round($countabsent / $sumuser * 100) . "%)</div>" : null) .
     '</div>';
 
     $sumabsent += $countabsent;

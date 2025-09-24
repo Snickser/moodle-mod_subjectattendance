@@ -40,3 +40,15 @@
     color: #000;
     display: flex;
 }
+
+.path-mod-subjectattendance .first-column-sticky td:first-child,
+.path-mod-subjectattendance .first-column-sticky th:first-child {
+    position: sticky;
+    left: 0;
+    background: #f5f5f5;
+    z-index: 3;
+}
+
+.path-mod-subjectattendance .table-sticky thead th {
+    z-index: 4;
+}
