@@ -61,6 +61,12 @@ class mod_subjectattendance_mod_form extends moodleform_mod {
             }
         }
 
+        $mform->addElement(
+            'advcheckbox',
+            'numbered',
+            get_string('numbered', 'subjectattendance'),
+        );
+
         $context = context_user::instance($USER->id);
         $roles = get_default_enrol_roles($context);
         $select = $mform->addElement(
@@ -75,12 +81,6 @@ class mod_subjectattendance_mod_form extends moodleform_mod {
         if (isset($this->_customdata['excluderoles'])) {
             $mform->setDefault('excluderoles', $this->_customdata['excluderoles']);
         }
-
-        $mform->addElement(
-            'advcheckbox',
-            'numbered',
-            get_string('numbered', 'subjectattendance'),
-        );
 
         $options = [
         0 => '✖ ⭘ ✔',
