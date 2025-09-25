@@ -150,6 +150,7 @@ $sumabsent = 0;
 $sumpresent = 0;
 $sumpartial = 0;
 $count = 0;
+$result = [];
 
 foreach ($students as $student) {
     if (!empty($attendance->excluderoles)) {
@@ -170,19 +171,29 @@ foreach ($students as $student) {
     $countpartial = 0;
 
     foreach ($subjects as $subject) {
-        $status = isset($logmap[$student->id][$subject->id]) ? $logmap[$student->id][$subject->id] : null;
+        $status = isset($logmap[$student->id][$subject->id]) ? (int)$logmap[$student->id][$subject->id] : null;
         $name = "status[{$student->id}][{$subject->id}]";
 
+        if (!isset($result[$subject->id])) {
+            $result[$subject->id] = [];
+        }
+        if (!isset($result[$subject->id][$status])) {
+            $result[$subject->id][$status] = 0;
+        }
+
         $class = 'attendance-select';
-        if ($status === '2') {
+        if ($status === 2) {
             $class .= ' present';
             $countpresent++;
-        } else if ($status === '1') {
+            $result[$subject->id][2] += 1;
+        } else if ($status === 1) {
             $class .= ' partial';
             $countpartial++;
-        } else if ($status === '0') {
+            $result[$subject->id][1] += 1;
+        } else if ($status === 0) {
             $class .= ' absent';
             $countabsent++;
+            $result[$subject->id][0] += 1;
         } else {
             $class .= ' none';
         }
@@ -222,23 +233,6 @@ foreach ($students as $student) {
     $sumpartial += $countpartial;
 
     $table->data[] = $row;
-}
-
-$result = [];
-
-foreach ($logmap as $category => $items) {
-    foreach ($items as $key => $value) {
-        if ($value === null) {
-            continue;
-        }
-        if (!isset($result[$key])) {
-            $result[$key] = [];
-        }
-        if (!isset($result[$key][$value])) {
-            $result[$key][$value] = 0;
-        }
-        $result[$key][$value] += 1;
-    }
 }
 
 if (($sumpresent + $sumpartial + $sumabsent) && has_capability('mod/subjectattendance:mark', $context, $USER->id)) {
