@@ -99,6 +99,7 @@
     left: 0;
     background-color: var(--sticky-col-bg);
     z-index: 4;
+    white-space: nowrap;
 }
 
 .path-mod-subjectattendance .first-column-sticky tbody tr.lastrow td:first-child {
