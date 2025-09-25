@@ -34,23 +34,32 @@
 
 .path-mod-subjectattendance .attendance-summary,
 .path-mod-subjectattendance .attendance-total-summary {
-    width: 8rem;
+    width: 10rem;
     font-weight: bold;
     text-align: center;
     color: #000;
     display: flex;
 }
 
+.path-mod-subjectattendance .attendance-percents {
+    width: 10rem;
+    font-weight: normal;
+    text-align: center;
+    color: #000;
+    display: flex;
+}
+
+.path-mod-subjectattendance table.generaltable {
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
 .path-mod-subjectattendance .first-column-sticky td:first-child,
 .path-mod-subjectattendance .first-column-sticky th:first-child {
     position: sticky;
     left: 0;
-    background: #f5f5f5;
+    background: #fff;
     z-index: 4;
+    border-right: 1px solid #eee;
 }
 
-.path-mod-subjectattendance .table-sticky thead th {
-    position: sticky;
-    top: 0;
-    z-index: 3;
-}
