@@ -5,7 +5,6 @@
     color: #000;
 }
 
-
 .path-mod-subjectattendance .attendance-col-select {
     width: 4rem;
     font-weight: bold;
@@ -58,7 +57,7 @@
 .path-mod-subjectattendance .first-column-sticky th:first-child {
     position: sticky;
     left: 0;
-    background: #fff;
+    background-color: #fff;
     z-index: 4;
     border-right: 1px solid #eee;
 }
@@ -71,7 +70,7 @@
 .path-mod-subjectattendance .last-column-sticky th:last-child {
     position: sticky;
     right: 0;
-    background: #fff;
+    background-color: #fff;
     z-index: 4;
     border-left: 1px solid #eee;
 }
