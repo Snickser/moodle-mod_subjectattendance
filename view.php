@@ -143,7 +143,7 @@ $table->head = array_merge(
     [get_string('stats')]
 );
 
-$table->attributes['class'] = 'table generaltable table-sm attendance-table first-column-sticky';
+$table->attributes['class'] = 'table table-sm attendance-table first-column-sticky';
 $table->attributes['id'] = 'attendance_table';
 
 $sumabsent = 0;
