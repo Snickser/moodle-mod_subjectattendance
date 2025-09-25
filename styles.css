@@ -58,7 +58,7 @@
     left: 0;
     background-color: var(--sticky-col-bg);
     z-index: 4;
-    box-shadow: 2px 0 0 var(--sticky-col-divider);
+    box-shadow: 1px 0 0 var(--sticky-col-divider);
 }
 
 .path-mod-subjectattendance .first-column-sticky tbody tr.lastrow td:first-child {
