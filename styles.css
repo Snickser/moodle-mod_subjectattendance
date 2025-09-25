@@ -64,5 +64,5 @@
 }
 
 .path-mod-subjectattendance .first-column-sticky tbody tr.lastrow td:first-child {
-    border-right: none !important;
+    border-right: none;
 }
