@@ -63,5 +63,5 @@
 
 .path-mod-subjectattendance .first-column-sticky tbody tr.lastrow td:first-child {
     box-shadow: none;
-    background-color: transparent !important;
+    background-color: transparent;
 }
