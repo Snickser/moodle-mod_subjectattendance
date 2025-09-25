@@ -142,11 +142,14 @@ $table->head = array_merge(
     }, $subjects),
     [get_string('stats')]
 );
-$table->attributes['class'] = 'table generaltable table-sm attendance-table';
+
+$table->attributes['class'] = 'table table-sm attendance-table first-column-sticky';
+$table->attributes['id'] = 'attendance_table';
 
 $sumabsent = 0;
 $sumpresent = 0;
 $sumpartial = 0;
+$count = 0;
 
 foreach ($students as $student) {
     if (!empty($attendance->excluderoles)) {
@@ -157,8 +160,10 @@ foreach ($students as $student) {
         }
     }
 
+    $count++;
+
     $url = new moodle_url('/user/profile.php', ['id' => $student->id]);
-    $row = [html_writer::link($url, fullname($student))];
+    $row = [ ($attendance->numbered ? ($count . '. ') : null) . html_writer::link($url, fullname($student))];
 
     $countabsent = 0;
     $countpresent = 0;
@@ -201,10 +206,15 @@ foreach ($students as $student) {
         }
     }
 
+    $sumuser = $countpresent + $countpartial + $countabsent;
     $row[] = '<div class="attendance-summary">' .
-    ($countpresent ? "<div style='flex: 1; background: #c8e6c9;'>$countpresent</div>" : null) .
-    ($countpartial ? "<div style='flex: 1; background: #fff9c4;'>$countpartial</div>" : null) .
-    ($countabsent ? "<div style='flex: 1; background: #ffcdd2;'>$countabsent</div>" : null) .
+    ($countpresent ? "<div style='flex: 1; background: #c8e6c9;'>{$countpresent}</div>" : null) .
+    ($countpartial ? "<div style='flex: 1; background: #fff9c4;'>{$countpartial}</div>" : null) .
+    ($countabsent ? "<div style='flex: 1; background: #ffcdd2;'>{$countabsent}</div>" : null) .
+    '</div><div class="attendance-percents">' .
+      ($countpresent ? "<div style='flex: 1;'>" . round($countpresent / $sumuser * 100) . "%</div>" : null) .
+      ($countpartial ? "<div style='flex: 1;'>" . round($countpartial / $sumuser * 100) . "%</div>" : null) .
+      ($countabsent ? "<div style='flex: 1;'>" . round($countabsent / $sumuser * 100) . "%</div>" : null) .
     '</div>';
 
     $sumabsent += $countabsent;
@@ -215,12 +225,17 @@ foreach ($students as $student) {
 }
 
 if (($sumpresent + $sumpartial + $sumabsent) && has_capability('mod/subjectattendance:mark', $context, $USER->id)) {
-    $summ = get_string('total') . '<div class="attendance-total-summary">' .
+    $summ = $sumpresent + $sumpartial + $sumabsent;
+    $row = get_string('total') . '<div class="attendance-total-summary">' .
     ($sumpresent ? "<div style='flex: 1; background: #c8e6c9;'>$sumpresent</div>" : null) .
     ($sumpartial ? "<div style='flex: 1; background: #fff9c4;'>$sumpartial</div>" : null) .
     ($sumabsent ? "<div style='flex: 1; background: #ffcdd2;'>$sumabsent</div>" : null) .
+    '</div><div class="attendance-percents">' .
+      ($sumpresent ? "<div style='flex: 1;'>" . round($sumpresent / $summ * 100) . "%</div>" : null) .
+      ($sumpartial ? "<div style='flex: 1;'>" . round($sumpartial / $summ * 100) . "%</div>" : null) .
+      ($sumabsent ? "<div style='flex: 1;'>" . round($sumabsent / $summ * 100) . "%</div>" : null) .
     '</div>';
-    $table->data[] = array_merge(array_map(fn($s) => '', $subjects), [''], [$summ]);
+    $table->data[] = array_merge(array_map(fn($s) => '', $subjects), [''], [$row]);
 }
 
 echo html_writer::table($table);
