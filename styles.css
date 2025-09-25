@@ -44,12 +44,12 @@
 }
 
 :root {
-  --sticky-col-bg: #fafafa;
-  --sticky-col-divider: #ccc;
+    --sticky-col-bg: #fafafa;
+    --sticky-col-divider: #ccc;
 }
 .theme-dark {
-  --sticky-col-bg: #222;
-  --sticky-col-divider: #333;
+    --sticky-col-bg: #222;
+    --sticky-col-divider: #333;
 }
 
 .path-mod-subjectattendance .first-column-sticky td:first-child,
