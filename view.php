@@ -196,6 +196,7 @@ foreach ($students as $student) {
             $result[$subject->id][0] += 1;
         } else {
             $class .= ' none';
+            $result[$subject->id][''] += 1;
         }
 
         if (has_capability('mod/subjectattendance:mark', $context, $USER->id)) {
