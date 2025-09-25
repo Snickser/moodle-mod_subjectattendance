@@ -29,7 +29,7 @@
 
 .path-mod-subjectattendance .attendance-summary,
 .path-mod-subjectattendance .attendance-total-summary {
-    width: 10rem;
+    width: 9rem;
     font-weight: bold;
     text-align: center;
     color: #000;
@@ -37,11 +37,52 @@
 }
 
 .path-mod-subjectattendance .attendance-percents {
-    width: 10rem;
+    width: 9rem;
     font-weight: normal;
     text-align: center;
     display: flex;
 }
+
+.path-mod-subjectattendance .attendance-row-summary {
+    width: 5rem;
+    text-align: center;
+    color: #000;
+    display: flex;
+}
+
+.path-mod-subjectattendance .attendance-row1a {
+    font-weight: bold;
+    background: #c8e6c9;
+    flex: 1;
+}
+
+.path-mod-subjectattendance .attendance-row1b {
+    font-weight: normal;
+    flex: 1;
+}
+
+.path-mod-subjectattendance .attendance-row2a {
+    font-weight: bold;
+    background: #fff9c4;
+    flex: 1;
+}
+
+.path-mod-subjectattendance .attendance-row2b {
+    font-weight: normal;
+    flex: 1;
+}
+
+.path-mod-subjectattendance .attendance-row3a {
+    font-weight: bold;
+    background: #ffcdd2;
+    flex: 1;
+}
+
+.path-mod-subjectattendance .attendance-row3b {
+    font-weight: normal;
+    flex: 1;
+}
+
 
 :root {
     --sticky-col-bg: #fafafa;
@@ -62,5 +103,6 @@
 
 .path-mod-subjectattendance .first-column-sticky tbody tr.lastrow td:first-child {
     box-shadow: none;
-    background-color: transparent;
+    font-weight: bold;
+//    background-color: transparent;
 }

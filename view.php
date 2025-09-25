@@ -143,7 +143,7 @@ $table->head = array_merge(
     [get_string('stats')]
 );
 
-$table->attributes['class'] = 'table table-sm attendance-table first-column-sticky';
+$table->attributes['class'] = 'table generaltable table-sm attendance-table first-column-sticky';
 $table->attributes['id'] = 'attendance_table';
 
 $sumabsent = 0;
@@ -224,6 +224,23 @@ foreach ($students as $student) {
     $table->data[] = $row;
 }
 
+$result = [];
+
+foreach ($logmap as $category => $items) {
+    foreach ($items as $key => $value) {
+        if ($value === null) {
+            continue;
+        }
+        if (!isset($result[$key])) {
+            $result[$key] = [];
+        }
+        if (!isset($result[$key][$value])) {
+            $result[$key][$value] = 0;
+        }
+        $result[$key][$value] += 1;
+    }
+}
+
 if (($sumpresent + $sumpartial + $sumabsent) && has_capability('mod/subjectattendance:mark', $context, $USER->id)) {
     $summ = $sumpresent + $sumpartial + $sumabsent;
     $row = get_string('total') . '<div class="attendance-total-summary">' .
@@ -235,7 +252,18 @@ if (($sumpresent + $sumpartial + $sumabsent) && has_capability('mod/subjectatten
       ($sumpartial ? "<div style='flex: 1;'>" . round($sumpartial / $summ * 100) . "%</div>" : null) .
       ($sumabsent ? "<div style='flex: 1;'>" . round($sumabsent / $summ * 100) . "%</div>" : null) .
     '</div>';
-    $table->data[] = array_merge(array_map(fn($s) => '', $subjects), [''], [$row]);
+    $table->data[] = array_merge(
+        [get_string('total')],
+        array_map(fn($s) => (
+        (isset($result[$s->id][2]) ? "<div class='attendance-row-summary'><div class='attendance-row1a'>{$result[$s->id][2]}</div>
+    <div class='attendance-row1b'>" . round($result[$s->id][2] / array_sum($result[$s->id]) * 100) . "%</div></div>" : null) .
+        (isset($result[$s->id][1]) ? "<div class='attendance-row-summary'><div class='attendance-row2a'>{$result[$s->id][1]}</div>
+    <div class='attendance-row2b'>" . round($result[$s->id][1] / array_sum($result[$s->id]) * 100) . "%</div></div>" : null) .
+        (isset($result[$s->id][0]) ? "<div class='attendance-row-summary'><div class='attendance-row3a'>{$result[$s->id][0]}</div>
+    <div class='attendance-row3b'>" . round($result[$s->id][0] / array_sum($result[$s->id]) * 100) . "%</div></div>" : null)
+        ), $subjects),
+        [$row]
+    );
 }
 
 echo html_writer::table($table);
