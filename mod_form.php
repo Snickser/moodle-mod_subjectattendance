@@ -76,6 +76,12 @@ class mod_subjectattendance_mod_form extends moodleform_mod {
             $mform->setDefault('excluderoles', $this->_customdata['excluderoles']);
         }
 
+        $mform->addElement(
+            'advcheckbox',
+            'numbered',
+            get_string('numbered', 'subjectattendance'),
+        );
+
         $options = [
         0 => '✖ ⭘ ✔',
         1 => '❌ ⚠ ✅',

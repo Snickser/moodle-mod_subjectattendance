@@ -66,3 +66,16 @@
 .path-mod-subjectattendance .first-column-sticky tbody tr.lastrow td:first-child {
     border-right: none;
 }
+
+.path-mod-subjectattendance .last-column-sticky td:last-child,
+.path-mod-subjectattendance .last-column-sticky th:last-child {
+    position: sticky;
+    right: 0;
+    background: #fff;
+    z-index: 4;
+    border-left: 1px solid #eee;
+}
+
+.path-mod-subjectattendance .last-column-sticky tbody tr.lastrow td:last-child {
+    border-left: none;
+}

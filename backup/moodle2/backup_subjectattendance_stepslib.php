@@ -34,7 +34,7 @@ class backup_subjectattendance_activity_structure_step extends backup_activity_s
      */
     protected function define_structure() {
         $subjectattendance = new backup_nested_element('subjectattendance', ['id'], [
-            'course', 'name', 'types', 'excluderoles', 'intro', 'introformat', 'timemodified']);
+            'course', 'name', 'types', 'notify', 'numbered', 'excluderoles', 'intro', 'introformat', 'timemodified']);
 
         $subjects = new backup_nested_element('subjects');
         $subject = new backup_nested_element('subject', ['id'], ['attendanceid', 'name']);

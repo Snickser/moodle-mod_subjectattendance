@@ -143,12 +143,13 @@ $table->head = array_merge(
     [get_string('stats')]
 );
 
-$table->attributes['class'] = 'table generaltable table-sm attendance-table first-column-sticky first-row-sticky';
+$table->attributes['class'] = 'table generaltable table-sm attendance-table first-column-sticky';
 $table->attributes['id'] = 'attendance_table';
 
 $sumabsent = 0;
 $sumpresent = 0;
 $sumpartial = 0;
+$count = 0;
 
 foreach ($students as $student) {
     if (!empty($attendance->excluderoles)) {
@@ -159,8 +160,10 @@ foreach ($students as $student) {
         }
     }
 
+    $count++;
+
     $url = new moodle_url('/user/profile.php', ['id' => $student->id]);
-    $row = [html_writer::link($url, fullname($student))];
+    $row = [ ($attendance->numbered ? ($count . '. ') : null) . html_writer::link($url, fullname($student))];
 
     $countabsent = 0;
     $countpresent = 0;
