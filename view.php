@@ -143,13 +143,14 @@ $table->head = array_merge(
     [get_string('stats')]
 );
 
-$table->attributes['class'] = 'table table-sm attendance-table first-column-sticky';
+$table->attributes['class'] = 'table generaltable table-sm attendance-table first-column-sticky';
 $table->attributes['id'] = 'attendance_table';
 
 $sumabsent = 0;
 $sumpresent = 0;
 $sumpartial = 0;
 $count = 0;
+$result = [];
 
 foreach ($students as $student) {
     if (!empty($attendance->excluderoles)) {
@@ -170,21 +171,32 @@ foreach ($students as $student) {
     $countpartial = 0;
 
     foreach ($subjects as $subject) {
-        $status = isset($logmap[$student->id][$subject->id]) ? $logmap[$student->id][$subject->id] : null;
+        $status = isset($logmap[$student->id][$subject->id]) ? (int)$logmap[$student->id][$subject->id] : null;
         $name = "status[{$student->id}][{$subject->id}]";
 
+        if (!isset($result[$subject->id])) {
+            $result[$subject->id] = [];
+        }
+        if (!isset($result[$subject->id][$status])) {
+            $result[$subject->id][$status] = 0;
+        }
+
         $class = 'attendance-select';
-        if ($status === '2') {
+        if ($status === 2) {
             $class .= ' present';
             $countpresent++;
-        } else if ($status === '1') {
+            $result[$subject->id][2] += 1;
+        } else if ($status === 1) {
             $class .= ' partial';
             $countpartial++;
-        } else if ($status === '0') {
+            $result[$subject->id][1] += 1;
+        } else if ($status === 0) {
             $class .= ' absent';
             $countabsent++;
+            $result[$subject->id][0] += 1;
         } else {
             $class .= ' none';
+            $result[$subject->id][''] += 1;
         }
 
         if (has_capability('mod/subjectattendance:mark', $context, $USER->id)) {
@@ -235,7 +247,18 @@ if (($sumpresent + $sumpartial + $sumabsent) && has_capability('mod/subjectatten
       ($sumpartial ? "<div style='flex: 1;'>" . round($sumpartial / $summ * 100) . "%</div>" : null) .
       ($sumabsent ? "<div style='flex: 1;'>" . round($sumabsent / $summ * 100) . "%</div>" : null) .
     '</div>';
-    $table->data[] = array_merge(array_map(fn($s) => '', $subjects), [''], [$row]);
+    $table->data[] = array_merge(
+        [get_string('total')],
+        array_map(fn($s) => (
+        (isset($result[$s->id][2]) ? "<div class='attendance-row-summary'><div class='attendance-row1a'>{$result[$s->id][2]}</div>
+    <div class='attendance-row1b'>" . round($result[$s->id][2] / array_sum($result[$s->id]) * 100) . "%</div></div>" : null) .
+        (isset($result[$s->id][1]) ? "<div class='attendance-row-summary'><div class='attendance-row2a'>{$result[$s->id][1]}</div>
+    <div class='attendance-row2b'>" . round($result[$s->id][1] / array_sum($result[$s->id]) * 100) . "%</div></div>" : null) .
+        (isset($result[$s->id][0]) ? "<div class='attendance-row-summary'><div class='attendance-row3a'>{$result[$s->id][0]}</div>
+    <div class='attendance-row3b'>" . round($result[$s->id][0] / array_sum($result[$s->id]) * 100) . "%</div></div>" : null)
+        ), $subjects),
+        [$row]
+    );
 }
 
 echo html_writer::table($table);
