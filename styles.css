@@ -27,10 +27,6 @@
     background-color: #fff9c4;
 }
 
-.path-mod-subjectattendance .attendance-select.none {
-    background-color: #fff;
-}
-
 .path-mod-subjectattendance .attendance-summary,
 .path-mod-subjectattendance .attendance-total-summary {
     width: 10rem;
@@ -44,13 +40,7 @@
     width: 10rem;
     font-weight: normal;
     text-align: center;
-    color: #000;
     display: flex;
-}
-
-.path-mod-subjectattendance table.generaltable {
-    border-collapse: separate;
-    border-spacing: 0;
 }
 
 .path-mod-subjectattendance .first-column-sticky td:first-child,

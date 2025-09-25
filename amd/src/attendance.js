@@ -50,6 +50,24 @@ define(['jquery'], function($) {
     }
 
     /**
+     * Updates sticky elements background to match table (for theme switch)
+     */
+    function updateStickyBackgrounds() {
+        // исправленный селектор без \
+        let selectors = [
+            '.first-column-sticky th:first-child',
+            '.first-column-sticky td:first-child',
+            '.last-column-sticky th:last-child',
+            '.last-column-sticky td:last-child',
+            '.table-sticky thead th'
+        ];
+        $(selectors.join(',')).each(function() {
+            let tableBg = $(this).closest('table').css('background-color');
+            $(this).css('background-color', tableBg);
+        });
+    }
+
+    /**
      * Initializes event handlers.
      */
     function init() {
@@ -128,6 +146,8 @@ define(['jquery'], function($) {
             }
         });
     }
+
+    $(document).on('themechanged', updateStickyBackgrounds);
 
     return {init: init};
 });
