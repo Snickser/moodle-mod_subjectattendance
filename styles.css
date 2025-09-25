@@ -46,13 +46,13 @@
 .path-mod-subjectattendance .attendance-row-summary {
     width: 5rem;
     text-align: center;
-    color: #000;
     display: flex;
 }
 
 .path-mod-subjectattendance .attendance-row1a {
     font-weight: bold;
     background: #c8e6c9;
+    color: #000;
     flex: 1;
 }
 
@@ -64,6 +64,7 @@
 .path-mod-subjectattendance .attendance-row2a {
     font-weight: bold;
     background: #fff9c4;
+    color: #000;
     flex: 1;
 }
 
@@ -75,6 +76,7 @@
 .path-mod-subjectattendance .attendance-row3a {
     font-weight: bold;
     background: #ffcdd2;
+    color: #000;
     flex: 1;
 }
 
