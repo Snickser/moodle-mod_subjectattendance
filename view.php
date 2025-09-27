@@ -233,7 +233,7 @@ foreach ($students as $student) {
 
     $sumuser = $countpresent + $countpartial + $countabsent + $countnone;
     $row[] = '<div class="attendance-summary">' .
-    ($countpresent ? "<div style='flex: 1; background: #c8e6c9;'>{$countpresent}</div>" : null) .
+    ($countpresent ? "<div style='flex: 1; background: #AAE6AD;'>{$countpresent}</div>" : null) .
     ($countpartial ? "<div style='flex: 1; background: #fff9c4;'>{$countpartial}</div>" : null) .
     ($countabsent ? "<div style='flex: 1; background: #ffcdd2;'>{$countabsent}</div>" : null) .
     '</div><div class="attendance-percents">' .
@@ -252,7 +252,7 @@ foreach ($students as $student) {
 if (($sumpresent + $sumpartial + $sumabsent) && has_capability('mod/subjectattendance:mark', $context, $USER->id)) {
     $summ = $sumpresent + $sumpartial + $sumabsent;
     $row = get_string('total') . '<div class="attendance-total-summary">' .
-    ($sumpresent ? "<div style='flex: 1; background: #c8e6c9;'>$sumpresent</div>" : null) .
+    ($sumpresent ? "<div style='flex: 1; background: #AAE6AD;'>$sumpresent</div>" : null) .
     ($sumpartial ? "<div style='flex: 1; background: #fff9c4;'>$sumpartial</div>" : null) .
     ($sumabsent ? "<div style='flex: 1; background: #ffcdd2;'>$sumabsent</div>" : null) .
     '</div><div class="attendance-percents">' .
@@ -275,7 +275,9 @@ if (($sumpresent + $sumpartial + $sumabsent) && has_capability('mod/subjectatten
     );
 }
 
+echo "<div class='attendance-container'>";
 echo html_writer::table($table);
+echo "</div>";
 
 $url = new moodle_url('export.php', ['id' => $cm->id]);
 echo html_writer::link(

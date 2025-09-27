@@ -12,7 +12,7 @@
 }
 
 .path-mod-subjectattendance .attendance-select.present {
-    background-color: #c8e6c9;
+    background-color: #AAE6AD;
 }
 
 .path-mod-subjectattendance .attendance-select.new {
@@ -52,7 +52,7 @@
 
 .path-mod-subjectattendance .attendance-row1a {
     font-weight: bold;
-    background: #c8e6c9;
+    background: #AAE6AD;
     color: #000;
     flex: 1;
 }
