@@ -67,6 +67,19 @@ class mod_subjectattendance_mod_form extends moodleform_mod {
             get_string('numbered', 'subjectattendance'),
         );
 
+        $options = [
+        0 => get_string('no'),
+        1 => get_string('yes'),
+        2 => get_string('emptyignorecolumn', 'subjectattendance'),
+        3 => get_string('emptyignorerow', 'subjectattendance'),
+        ];
+        $select = $mform->addElement(
+            'select',
+            'emptyignore',
+            get_string('emptyignore', 'subjectattendance'),
+            $options,
+        );
+
         $context = context_user::instance($USER->id);
         $roles = get_default_enrol_roles($context);
         $select = $mform->addElement(

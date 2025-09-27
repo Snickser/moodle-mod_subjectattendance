@@ -23,6 +23,9 @@
  */
 
 $string['allgroups'] = 'All groups';
+$string['emptyignore'] = 'Ignore empty values when calculating percentages in statistics';
+$string['emptyignorecolumn'] = 'Columns';
+$string['emptyignorerow'] = 'Rows';
 $string['eventattendance_exported'] = 'Attendance exported to CSV';
 $string['eventattendance_marked'] = 'Attendance marked';
 $string['excluderoles'] = 'Exclude roles';
@@ -38,7 +41,7 @@ $string['modulenameplural'] = 'Subject attendances';
 $string['nosubjects'] = 'No subjects';
 $string['notify'] = 'Notify students';
 $string['notify_help'] = 'Notifications to students about the assigned status are enabled, and their different options. Notify only for reds, for reds and yellows, and for all.';
-$string['numbered'] = 'Numbered list';
+$string['numbered'] = 'Numbered list.';
 $string['pluginadministration'] = '';
 $string['pluginname'] = 'Subject attendance';
 $string['privacy:metadata:log'] = 'User attendance';
