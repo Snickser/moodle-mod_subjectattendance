@@ -23,6 +23,9 @@
  */
 
 $string['allgroups'] = 'All groups';
+$string['emptyignore'] = 'Ignore empty values when calculating percentages in statistics';
+$string['emptyignorecolumn'] = 'Columns';
+$string['emptyignorerow'] = 'Rows';
 $string['eventattendance_exported'] = 'Attendance exported to CSV';
 $string['eventattendance_marked'] = 'Attendance marked';
 $string['excluderoles'] = 'Exclude roles';

@@ -125,7 +125,7 @@ $options = isset($displayoptions[$attendance->types]) ? $displayoptions[$attenda
 $table = new html_table();
 $table->head = array_merge(
     [get_string('fullname')],
-    array_map(function ($s) use ($attendance, $cm, $options) {
+    array_map(function ($s) use ($attendance, $cm, $options, $context, $USER) {
         $headerselect = html_writer::select(
             $options,
             'colselect[' . $s->id . ']',
@@ -138,7 +138,7 @@ $table->head = array_merge(
                 'data-attendanceid' => $attendance->id,
             ]
         );
-        return $s->name . '&nbsp;' . $headerselect;
+        return $s->name . (has_capability('mod/subjectattendance:mark', $context, $USER->id) ? '&nbsp;' . $headerselect : null);
     }, $subjects),
     [get_string('stats')]
 );
@@ -169,6 +169,7 @@ foreach ($students as $student) {
     $countabsent = 0;
     $countpresent = 0;
     $countpartial = 0;
+    $countnone = 0;
 
     foreach ($subjects as $subject) {
         $status = isset($logmap[$student->id][$subject->id]) ? (int)$logmap[$student->id][$subject->id] : null;
@@ -196,7 +197,19 @@ foreach ($students as $student) {
             $result[$subject->id][0] += 1;
         } else {
             $class .= ' none';
-            $result[$subject->id][''] += 1;
+            switch ($attendance->emptyignore) {
+                case 3:
+                    $result[$subject->id][''] += 1;
+                    break;
+                case 2:
+                    $countnone++;
+                    break;
+                case 1:
+                    break;
+                default:
+                    $countnone++;
+                    $result[$subject->id][''] += 1;
+            }
         }
 
         if (has_capability('mod/subjectattendance:mark', $context, $USER->id)) {
@@ -218,7 +231,7 @@ foreach ($students as $student) {
         }
     }
 
-    $sumuser = $countpresent + $countpartial + $countabsent;
+    $sumuser = $countpresent + $countpartial + $countabsent + $countnone;
     $row[] = '<div class="attendance-summary">' .
     ($countpresent ? "<div style='flex: 1; background: #c8e6c9;'>{$countpresent}</div>" : null) .
     ($countpartial ? "<div style='flex: 1; background: #fff9c4;'>{$countpartial}</div>" : null) .
@@ -247,6 +260,7 @@ if (($sumpresent + $sumpartial + $sumabsent) && has_capability('mod/subjectatten
       ($sumpartial ? "<div style='flex: 1;'>" . round($sumpartial / $summ * 100) . "%</div>" : null) .
       ($sumabsent ? "<div style='flex: 1;'>" . round($sumabsent / $summ * 100) . "%</div>" : null) .
     '</div>';
+
     $table->data[] = array_merge(
         [get_string('total')],
         array_map(fn($s) => (
