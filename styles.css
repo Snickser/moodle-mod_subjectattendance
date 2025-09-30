@@ -11,21 +11,22 @@
     background-color: #f5f5f5;
 }
 
-.path-mod-subjectattendance .attendance-select.present {
-    background-color: #c8e6c9;
-}
-
 .path-mod-subjectattendance .attendance-select.new {
     background-color: #90caf9;
 }
 
-.path-mod-subjectattendance .attendance-select.absent {
-    background-color: #ffcdd2;
+.path-mod-subjectattendance .attendance-select.present {
+    background-color: #AAE6AD;
 }
 
 .path-mod-subjectattendance .attendance-select.partial {
-    background-color: #fff9c4;
+    background-color: #FFFE9A;
 }
+
+.path-mod-subjectattendance .attendance-select.absent {
+    background-color: #FFC7C7;
+}
+
 
 .path-mod-subjectattendance .attendance-summary,
 .path-mod-subjectattendance .attendance-total-summary {
@@ -52,7 +53,7 @@
 
 .path-mod-subjectattendance .attendance-row1a {
     font-weight: bold;
-    background: #c8e6c9;
+    background: #AAE6AD;
     color: #000;
     flex: 1;
 }
@@ -64,7 +65,7 @@
 
 .path-mod-subjectattendance .attendance-row2a {
     font-weight: bold;
-    background: #fff9c4;
+    background: #FFFE9A;
     color: #000;
     flex: 1;
 }
@@ -76,7 +77,7 @@
 
 .path-mod-subjectattendance .attendance-row3a {
     font-weight: bold;
-    background: #ffcdd2;
+    background: #FFC7C7;
     color: #000;
     flex: 1;
 }
