@@ -10,3 +10,4 @@ The list of topics is set in the settings and can be expanded and deleted.
 *****
 
 
+<img width="1009" height="764" alt="Screenshot 2025-09-27 094437" src="https://github.com/user-attachments/assets/f328a30c-ed27-4b67-bcd3-14f399d543e8" />
