@@ -77,11 +77,17 @@ if (has_capability('mod/subjectattendance:mark', $context, $USER->id)) {
             $groupoptions[$gid] = $g->name;
         }
 
+        if (version_compare($CFG->version, '2025050000', '>=')) {
+            $marginclass = 'ms-2';
+        } else {
+            $marginclass = 'ml-2';
+        }
+
         echo '<div class="gap-2 mb-2">';
         echo '<form method="get" class="d-flex align-items-center gap-2">';
         echo '<input type="hidden" name="id" value="' . $cm->id . '">';
         echo html_writer::select($groupoptions, 'group', $selectedgroup, false, ['onchange' => 'this.form.submit();']);
-        echo '<input type="submit" class="btn btn-primary ml-2" value=' . get_string('reload', 'core') . '>';
+        echo '<input type="submit" class="btn btn-primary ' . $marginclass . '" value=' . get_string('reload', 'core') . '>';
         echo '</form>';
         echo '</div>';
     }
@@ -277,7 +283,7 @@ if (($sumpresent + $sumpartial + $sumabsent) && has_capability('mod/subjectatten
 
 echo "<div class='attendance-container'>";
 echo html_writer::table($table);
-echo "</div>";
+echo "</div><br>";
 
 $url = new moodle_url('export.php', ['id' => $cm->id]);
 echo html_writer::link(
