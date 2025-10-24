@@ -126,6 +126,17 @@ class mod_subjectattendance_mod_form extends moodleform_mod {
             get_string('numbered', 'subjectattendance'),
         );
 
+        $options = [
+        0 => get_string('fullname'),
+        1 => get_string('alternatename'),
+        ];
+        $select = $mform->addElement(
+            'select',
+            'namedisplay',
+            get_string('fullnamedisplay', 'admin'),
+            $options,
+        );
+
         $this->standard_coursemodule_elements();
         $this->add_action_buttons();
     }
