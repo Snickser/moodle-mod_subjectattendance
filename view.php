@@ -170,7 +170,10 @@ foreach ($students as $student) {
     $count++;
 
     $url = new moodle_url('/user/profile.php', ['id' => $student->id]);
-    $row = [ ($attendance->numbered ? ($count . '. ') : null) . html_writer::link($url, fullname($student))];
+    $row = [ ($attendance->numbered ? ($count . '. ') : null) . html_writer::link(
+        $url,
+        ($attendance->namedisplay ? fullname($student, true) : fullname($student, false))
+    )];
 
     $countabsent = 0;
     $countpresent = 0;

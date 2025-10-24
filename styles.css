@@ -16,15 +16,15 @@
 }
 
 .path-mod-subjectattendance .attendance-select.present {
-    background-color: #AAE6AD;
+    background-color: #aae6ad;
 }
 
 .path-mod-subjectattendance .attendance-select.partial {
-    background-color: #FFFE9A;
+    background-color: #fffe9a;
 }
 
 .path-mod-subjectattendance .attendance-select.absent {
-    background-color: #FFC7C7;
+    background-color: #ffc7c7;
 }
 
 
@@ -53,7 +53,7 @@
 
 .path-mod-subjectattendance .attendance-row1a {
     font-weight: bold;
-    background: #AAE6AD;
+    background: #aae6ad;
     color: #000;
     flex: 1;
 }
@@ -65,7 +65,7 @@
 
 .path-mod-subjectattendance .attendance-row2a {
     font-weight: bold;
-    background: #FFFE9A;
+    background: #fffe9a;
     color: #000;
     flex: 1;
 }
@@ -77,7 +77,7 @@
 
 .path-mod-subjectattendance .attendance-row3a {
     font-weight: bold;
-    background: #FFC7C7;
+    background: #ffc7c7;
     color: #000;
     flex: 1;
 }

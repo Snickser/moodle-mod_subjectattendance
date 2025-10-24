@@ -80,5 +80,14 @@ function xmldb_subjectattendance_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2025092718, 'subjectattendance');
     }
 
+    if ($oldversion < 2025102319) {
+        $table = new xmldb_table('subjectattendance');
+        $field = new xmldb_field('namedisplay', XMLDB_TYPE_INTEGER, '1', null, null, null, 0, 'emptyignore');
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+        upgrade_mod_savepoint(true, 2025102319, 'subjectattendance');
+    }
+
     return true;
 }

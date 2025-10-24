@@ -82,7 +82,7 @@ $header = array_merge(['Student ID', 'Student name'], array_map(fn($s) => $s->na
 fputcsv($fp, $header, ',', '"', '\\');
 
 foreach ($students as $student) {
-    $row = [$student->id, fullname($student)];
+    $row = [$student->id, ($attendance->namedisplay ? fullname($student, true) : fullname($student, false))];
     foreach ($subjects as $subject) {
         $status = $logmap[$student->id][$subject->id] ?? '-';
         $row[] = $status;
