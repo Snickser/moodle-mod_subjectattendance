@@ -55,11 +55,18 @@ class mod_subjectattendance_mod_form extends moodleform_mod {
             if ($subjects) {
                 $lines = [];
                 foreach ($subjects as $s) {
-                    $lines[] = $s->name;
+                    $lines[] = $s->name . ($s->position ? '|' . $s->position : null);
                 }
                 $mform->setDefault('subjectslist', implode("\n", $lines));
             }
         }
+
+        $mform->addElement(
+            'static',
+            'subjectslist_desc',
+            null,
+            html_writer::span(get_string('subjectslist_desc', 'subjectattendance'))
+        );
 
         $context = context_user::instance($USER->id);
         $roles = get_default_enrol_roles($context);

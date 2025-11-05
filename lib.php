@@ -65,9 +65,11 @@ function subjectattendance_add_instance($data, $mform = null) {
         $lines = preg_split('/\r?\n/', trim($data->subjectslist));
         foreach ($lines as $line) {
             if ($line !== '') {
+                [$name, $position] = array_pad(explode('|', trim($line)), 2, 0);
                 $DB->insert_record('subjectattendance_subjects', (object)[
                     'attendanceid' => $id,
-                    'name' => $line,
+                    'name' => $name,
+                    'position' => $position,
                 ]);
             }
         }
@@ -93,7 +95,7 @@ function subjectattendance_update_instance($data, $mform = null) {
     $oldsubjects = $DB->get_records('subjectattendance_subjects', ['attendanceid' => $data->id]);
     $oldnames = [];
     foreach ($oldsubjects as $s) {
-        $oldnames[$s->name] = $s->id;
+        $oldnames[$s->name] = [$s->id, $s->position];
     }
 
     // Parse new subjects from list.
@@ -104,20 +106,27 @@ function subjectattendance_update_instance($data, $mform = null) {
     $newsubjectids = [];
 
     foreach ($lines as $line) {
-        if (isset($oldnames[$line])) {
-            $newsubjectids[] = $oldnames[$line];
-            unset($oldnames[$line]);
+        [$name, $position] = array_pad(explode('|', trim($line)), 2, 0);
+        if (isset($oldnames[$name])) {
+            if ($oldnames[$name][1] !== $position) {
+                $DB->update_record(
+                    'subjectattendance_subjects',
+                    ['id' => $oldnames[$name][0], 'position' => $position]
+                );
+            }
+            unset($oldnames[$name]);
         } else {
-            $newsubjectids[] = $DB->insert_record('subjectattendance_subjects', (object)[
+            $DB->insert_record('subjectattendance_subjects', (object)[
                 'attendanceid' => $data->id,
-                'name' => $line,
+                'name' => $name,
+                'position' => $position,
             ]);
         }
     }
 
     // Delete old subjects not in the new list.
     if (!empty($oldnames)) {
-        $DB->delete_records_list('subjectattendance_subjects', 'id', array_values($oldnames));
+        $DB->delete_records_list('subjectattendance_subjects', 'id', array_column($oldnames, 0));
     }
 
     return true;
