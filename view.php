@@ -57,7 +57,7 @@ echo $OUTPUT->heading(format_string($attendance->name));
 $subjects = $DB->get_records(
     'subjectattendance_subjects',
     ['attendanceid' => $attendance->id],
-    'position desc',
+    'position desc,id asc',
     'id, name'
 );
 foreach ($subjects as $id => $subject) {
