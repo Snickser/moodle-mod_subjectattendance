@@ -54,7 +54,12 @@ $PAGE->set_cacheable(false);
 echo $OUTPUT->header();
 echo $OUTPUT->heading(format_string($attendance->name));
 
-$subjects = $DB->get_records('subjectattendance_subjects', ['attendanceid' => $attendance->id], '', 'id, name');
+$subjects = $DB->get_records(
+    'subjectattendance_subjects',
+    ['attendanceid' => $attendance->id],
+    'position desc,id asc',
+    'id, name'
+);
 foreach ($subjects as $id => $subject) {
     $subjects[$id]->name = format_string($subject->name, true, ['context' => $context]);
 }

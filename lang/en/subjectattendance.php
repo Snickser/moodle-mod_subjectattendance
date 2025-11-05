@@ -52,5 +52,6 @@ $string['subjectattendance:addinstance'] = 'Add a new subject attendance instanc
 $string['subjectattendance:mark'] = 'Mark students attendance by subject';
 $string['subjectattendance:view'] = 'View subject attendance';
 $string['subjectslist'] = 'Subjects (one per line)';
+$string['subjectslist_desc'] = 'Hint: In the line separated by "|", you can specify a numeric weight for reverse sorting.';
 $string['subjectslist_help'] = 'New items are added to the end of the list. Changing the name of previously added ones is not performed, the old one will be deleted and a new one will be added, so watch the name in advance.';
 $string['types'] = 'Types of icons';
