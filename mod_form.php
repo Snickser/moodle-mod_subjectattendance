@@ -103,7 +103,7 @@ class mod_subjectattendance_mod_form extends moodleform_mod {
         $options = [
         0 => get_string('no', 'core'),
         1 => get_string('always', 'core'),
-        2 => get_string('toonly', 'core', '❌ ⚠'),
+        2 => get_string('toonly', 'core', '⚠ ❌'),
         3 => get_string('toonly', 'core', '❌'),
         ];
         $select = $mform->addElement(
@@ -141,6 +141,19 @@ class mod_subjectattendance_mod_form extends moodleform_mod {
             'select',
             'namedisplay',
             get_string('fullnamedisplay', 'admin'),
+            $options,
+        );
+
+        $options = [
+        0 => get_string('firstname'),
+        1 => get_string('lastname'),
+        2 => get_string('alternatename') . ' + ' . get_string('firstname'),
+        3 => get_string('alternatename') . ' + ' . get_string('lastname'),
+        ];
+        $select = $mform->addElement(
+            'select',
+            'sortorder',
+            get_string('sortby'),
             $options,
         );
 

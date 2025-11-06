@@ -106,11 +106,31 @@ if (has_capability('mod/subjectattendance:mark', $context, $USER->id)) {
     $students[] = $USER;
 }
 
-usort($students, function ($a, $b) {
-    $namea = strtolower($a->firstname . ' ' . $a->lastname);
-    $nameb = strtolower($b->firstname . ' ' . $b->lastname);
-    return strcmp($namea, $nameb);
-});
+if ($attendance->sortorder == 2) {
+    usort($students, function ($a, $b) {
+        $namea = mb_strtolower(trim($a->alternatename . ' ' . $a->firstname . ' ' . $a->lastname));
+        $nameb = mb_strtolower(trim($b->alternatename . ' ' . $b->firstname . ' ' . $b->lastname));
+        return strcmp($namea, $nameb);
+    });
+} else if ($attendance->sortorder == 3) {
+    usort($students, function ($a, $b) {
+        $namea = mb_strtolower(trim($a->alternatename . ' ' . $a->lastname . ' ' . $a->firstname));
+        $nameb = mb_strtolower(trim($b->alternatename . ' ' . $b->lastname . ' ' . $b->firstname));
+        return strcmp($namea, $nameb);
+    });
+} else if ($attendance->sortorder == 1) {
+    usort($students, function ($a, $b) {
+        $namea = mb_strtolower(trim($a->lastname . ' ' . $a->firstname));
+        $nameb = mb_strtolower(trim($b->lastname . ' ' . $b->firstname));
+        return strcmp($namea, $nameb);
+    });
+} else {
+    usort($students, function ($a, $b) {
+        $namea = mb_strtolower(trim($a->firstname . ' ' . $a->lastname));
+        $nameb = mb_strtolower(trim($b->firstname . ' ' . $b->lastname));
+        return strcmp($namea, $nameb);
+    });
+}
 
 $subjectids = array_keys($subjects);
 $logs = $DB->get_records_list('subjectattendance_log', 'subjectid', $subjectids);
