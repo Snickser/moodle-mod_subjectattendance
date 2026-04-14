@@ -32,7 +32,13 @@ require_once($CFG->dirroot . '/course/moodleform_mod.php');
  */
 class mod_subjectattendance_mod_form extends moodleform_mod {
     /**
-     * Configuration form
+     * Format grade-related default values before populating the form.
+     *
+     * This ensures that grade and passing grade are displayed using the
+     * configured number of decimal places.
+     *
+     * @param stdClass|array $defaultvalues Default form values
+     * @return void
      */
     public function set_data($defaultvalues) {
         $decimals = isset($defaultvalues->decimalpoints) ? (int)$defaultvalues->decimalpoints : 2;

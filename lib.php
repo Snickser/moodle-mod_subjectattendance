@@ -281,7 +281,7 @@ function subjectattendance_update_grades($subjectattendance, $userid = 0, $nulli
 /**
  * Calculate grade for one user based on attendance records.
  *
- * @param int $attendanceid Activity instance ID
+ * @param stdClass $subjectattendance Activity instance
  * @param int $userid User ID
  * @return float|null
  */
