@@ -339,7 +339,7 @@ function subjectattendance_calculate_user_grade($subjectattendance, $userid) {
     }
 
     if (!$totalitems || !$earneditems || !$grademax) {
-		return null;
+        return null;
     }
 
     return round(($earneditems / $totalitems) * $grademax, $subjectattendance->decimalpoints);
