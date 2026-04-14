@@ -306,7 +306,7 @@ function subjectattendance_calculate_user_grade($subjectattendance, $userid) {
     }
 
     $grademax = isset($subjectattendance->grade) ? (float)$subjectattendance->grade : 5;
-    $ignoreempty = !empty($subjectattendance->emptyignore);
+    $ignoreempty = !in_array((int)$subjectattendance->emptyignore, [0, 2], true);
 
     $totalitems = 0;
     $earneditems = 0;
@@ -328,7 +328,6 @@ function subjectattendance_calculate_user_grade($subjectattendance, $userid) {
             case 1:
                 $earneditems++;
                 break;
-
             case 0:
             default:
                 break;
@@ -337,6 +336,10 @@ function subjectattendance_calculate_user_grade($subjectattendance, $userid) {
 
     if ($totalitems === 0) {
         return null;
+    }
+
+    if (!$totalitems || !$earneditems || !$grademax) {
+	return null;
     }
 
     return round(($earneditems / $totalitems) * $grademax, $subjectattendance->decimalpoints);
