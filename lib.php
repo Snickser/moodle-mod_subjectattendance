@@ -207,7 +207,7 @@ function subjectattendance_grade_item_update($subjectattendance, $grades = null)
 
     if ($subjectattendance->grade > 0) {
         $params['gradetype'] = GRADE_TYPE_VALUE;
-        $params['grademax']  = (float)($quiz->grade ?? 5);
+        $params['grademax']  = (float)($subjectattendance->grade ?? 5);
         $params['grademin']  = 0;
     } else {
         $params['gradetype'] = GRADE_TYPE_NONE;
