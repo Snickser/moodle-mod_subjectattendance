@@ -127,4 +127,6 @@ if (
     force_current_language($oldforcelang);
 }
 
+subjectattendance_update_grades($attendance, $studentid);
+
 echo json_encode(['success' => true]);
