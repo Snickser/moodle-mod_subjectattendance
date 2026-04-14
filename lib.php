@@ -338,7 +338,7 @@ function subjectattendance_calculate_user_grade($subjectattendance, $userid) {
         return null;
     }
 
-    if (!$totalitems && !$earneditems) {
+    if (!$totalitems || !$earneditems) {
         return null;
     }
 
