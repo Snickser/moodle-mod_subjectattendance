@@ -30,6 +30,8 @@ $string['eventattendance_exported'] = 'Attendance exported to CSV';
 $string['eventattendance_marked'] = 'Attendance marked';
 $string['excluderoles'] = 'Exclude roles';
 $string['exportcsv'] = 'Export CSV';
+$string['grademax'] = 'grade';
+$string['grademax_help'] = 'The range of scores will be adjusted to this value, as 0-100%.';
 $string['messagebody'] = 'Hello {$a->firstname}! The attendance sheet has a mark {$a->status}
 In course <a href="{$a->url}">«{$a->course}» - {$a->name}</a>
 Topic «{$a->field}»';

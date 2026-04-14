@@ -115,7 +115,7 @@ function xmldb_subjectattendance_upgrade($oldversion) {
         }
 
         $table = new xmldb_table('subjectattendance');
-        $field = new xmldb_field('gradepass', XMLDB_TYPE_NUMBER, '10, 5', null, XMLDB_NOTNULL, null, 0, 'grade');
+        $field = new xmldb_field('gradepass', XMLDB_TYPE_NUMBER, '10, 5', null, XMLDB_NOTNULL, null, 3, 'grade');
         if (!$dbman->field_exists($table, $field)) {
             $dbman->add_field($table, $field);
         }

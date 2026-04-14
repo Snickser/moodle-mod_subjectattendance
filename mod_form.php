@@ -188,7 +188,8 @@ class mod_subjectattendance_mod_form extends moodleform_mod {
 
         $mform->addElement('text', 'grade', get_string('grademax', 'grades'), ['size' => '5']);
         $mform->setType('grade', PARAM_LOCALISEDFLOAT);
-        $mform->setDefault('grade', 5);
+        $mform->addHelpButton('grade', 'grademax', 'subjectattendance');
+        $mform->setDefault('grade', 0);
 
         // Overall decimal points.
         $options = [];
