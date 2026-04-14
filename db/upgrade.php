@@ -107,5 +107,30 @@ function xmldb_subjectattendance_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2025110619, 'subjectattendance');
     }
 
+    if ($oldversion < 2026041320) {
+        $table = new xmldb_table('subjectattendance');
+        $field = new xmldb_field('grade', XMLDB_TYPE_NUMBER, '10, 5', null, XMLDB_NOTNULL, null, 0, 'introformat');
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        $table = new xmldb_table('subjectattendance');
+        $field = new xmldb_field('gradepass', XMLDB_TYPE_NUMBER, '10, 5', null, XMLDB_NOTNULL, null, 3, 'grade');
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+        upgrade_mod_savepoint(true, 2026041320, 'subjectattendance');
+    }
+
+    if ($oldversion < 2026041422) {
+        $table = new xmldb_table('subjectattendance');
+        $field = new xmldb_field('decimalpoints', XMLDB_TYPE_INTEGER, '1', null, XMLDB_NOTNULL, null, 2, 'gradepass');
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        upgrade_mod_savepoint(true, 2026041422, 'subjectattendance');
+    }
+
     return true;
 }

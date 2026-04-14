@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="mod/subjectattendance/db" VERSION="2025092700" COMMENT="XMLDB file for Subject Attendance module">
+<XMLDB PATH="mod/subjectattendance/db" VERSION="2026041400" COMMENT="XMLDB file for Subject Attendance module">
     <TABLES>
         <TABLE NAME="subjectattendance" COMMENT="Main attendance table">
             <FIELDS>
@@ -15,6 +15,9 @@
                 <FIELD NAME="numbered" TYPE="int" LENGTH="1" NOTNULL="false"/>
                 <FIELD NAME="intro" TYPE="text" NOTNULL="false"/>
                 <FIELD NAME="introformat" TYPE="int" LENGTH="2" NOTNULL="false"/>
+    		<FIELD NAME="grade" TYPE="number" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" DECIMALS="5"/>
+	        <FIELD NAME="gradepass" TYPE="number" LENGTH="10" NOTNULL="true" DEFAULT="3" SEQUENCE="false" DECIMALS="5"/>
+    		<FIELD NAME="decimalpoints" TYPE="int" LENGTH="1" NOTNULL="false" DEFAULT="2" SEQUENCE="false"/>
                 <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true"/>
                 <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true"/>
             </FIELDS>

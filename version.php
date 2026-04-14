@@ -24,7 +24,7 @@
 
 defined('MOODLE_INTERNAL') || die();
 $plugin->component = 'mod_subjectattendance';
-$plugin->version = 2025110619;
+$plugin->version = 2026041423;
 $plugin->requires = 2023100900;
 $plugin->maturity = MATURITY_STABLE;
-$plugin->release = 'v0.15';
+$plugin->release = 'v0.16';

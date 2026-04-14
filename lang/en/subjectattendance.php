@@ -30,6 +30,8 @@ $string['eventattendance_exported'] = 'Attendance exported to CSV';
 $string['eventattendance_marked'] = 'Attendance marked';
 $string['excluderoles'] = 'Exclude roles';
 $string['exportcsv'] = 'Export CSV';
+$string['grademax'] = 'grade';
+$string['grademax_help'] = 'The range of scores will be adjusted to this value, as 0-100%.';
 $string['messagebody'] = 'Hello {$a->firstname}! The attendance sheet has a mark {$a->status}
 In course <a href="{$a->url}">«{$a->course}» - {$a->name}</a>
 Topic «{$a->field}»';
@@ -52,6 +54,6 @@ $string['subjectattendance:addinstance'] = 'Add a new subject attendance instanc
 $string['subjectattendance:mark'] = 'Mark students attendance by subject';
 $string['subjectattendance:view'] = 'View subject attendance';
 $string['subjectslist'] = 'Subjects (one per line)';
-$string['subjectslist_desc'] = 'Hint: In the line separated by "|", you can specify a numeric weight for reverse sorting.';
-$string['subjectslist_help'] = 'New items are added to the end of the list. Changing the name of previously added ones is not performed, the old one will be deleted and a new one will be added, so watch the name in advance.';
+$string['subjectslist_desc'] = '⚠️ In a line separated by "|", you can specify a numeric weight for reverse sorting of items on the viewing page, for example: "name|10".';
+$string['subjectslist_help'] = 'New items are added to the end of the list. Changing the name of previously added ones is not performed, the old one will be deleted and a new one will be added, so watch the name in advance. The separator "|" allows you to specify a numeric weight for sorting, and the weight can be changed.';
 $string['types'] = 'Types of icons';

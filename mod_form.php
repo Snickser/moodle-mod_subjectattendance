@@ -32,6 +32,28 @@ require_once($CFG->dirroot . '/course/moodleform_mod.php');
  */
 class mod_subjectattendance_mod_form extends moodleform_mod {
     /**
+     * Format grade-related default values before populating the form.
+     *
+     * This ensures that grade and passing grade are displayed using the
+     * configured number of decimal places.
+     *
+     * @param stdClass|array $defaultvalues Default form values
+     * @return void
+     */
+    public function set_data($defaultvalues) {
+        $decimals = isset($defaultvalues->decimalpoints) ? (int)$defaultvalues->decimalpoints : 2;
+        if (isset($defaultvalues->grade)) {
+            $defaultvalues->grade = format_float((float)$defaultvalues->grade, $decimals);
+        }
+
+        if (isset($defaultvalues->gradepass)) {
+            $defaultvalues->gradepass = format_float((float)$defaultvalues->gradepass, $decimals);
+        }
+
+        parent::set_data($defaultvalues);
+    }
+
+    /**
      * Configuration form
      */
     public function definition() {
@@ -156,6 +178,31 @@ class mod_subjectattendance_mod_form extends moodleform_mod {
             get_string('sortby'),
             $options,
         );
+
+        $mform->addElement('header', 'grades', get_string('gradenoun', 'moodle'));
+
+        $mform->addElement('text', 'gradepass', get_string('gradepass', 'grades'), ['size' => '5']);
+        $mform->setType('gradepass', PARAM_LOCALISEDFLOAT);
+        $mform->addHelpButton('gradepass', 'gradepass', 'grades');
+        $mform->setDefault('gradepass', 3);
+
+        $mform->addElement('text', 'grade', get_string('grademax', 'grades'), ['size' => '5']);
+        $mform->setType('grade', PARAM_LOCALISEDFLOAT);
+        $mform->addHelpButton('grade', 'grademax', 'subjectattendance');
+        $mform->setDefault('grade', 0);
+
+        // Overall decimal points.
+        $options = [];
+        for ($i = 0; $i <= 5; $i++) {
+            $options[$i] = $i;
+        }
+        $mform->addElement(
+            'select',
+            'decimalpoints',
+            get_string('decimalplaces', 'quiz'),
+            $options
+        );
+        $mform->addHelpButton('decimalpoints', 'decimalplaces', 'quiz');
 
         $this->standard_coursemodule_elements();
         $this->add_action_buttons();

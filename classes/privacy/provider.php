@@ -35,7 +35,7 @@ use core_privacy\local\request\core_user_data_provider;
  *
  * @package mod_subjectattendance
  */
-class provider implements core_user_data_provider, \core_privacy\local\metadata\provider {
+class provider implements \core_privacy\local\metadata\provider, core_user_data_provider {
     /**
      * Returns meta data about this plugin's data.
      *

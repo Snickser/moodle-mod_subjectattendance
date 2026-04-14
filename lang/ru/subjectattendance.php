@@ -31,6 +31,7 @@ $string['eventattendance_exported'] = 'Посещаемость экспорти
 $string['eventattendance_marked'] = 'Посещаемость отмечена';
 $string['excluderoles'] = 'Исключать роли из списка';
 $string['excused'] = 'Уважительная причина';
+$string['grademax_help'] = 'Диапазон оценок будет приведён к этому значению, как 0-100%.';
 $string['messagebody'] = '{$a->status} {$a->firstname}, уведомляем об отметке посещаемости.
 В курсе <a href="{$a->url}">«{$a->course}» - {$a->name}</a>
 Тема «{$a->field}»';
