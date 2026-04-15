@@ -70,17 +70,18 @@ if (has_capability('mod/subjectattendance:mark', $context, $USER->id)) {
     } else {
         $allgroups = groups_get_all_groups($course->id, $USER->id);
     }
-    $selectedgroup = optional_param('group', 0, PARAM_INT);
+
+    $selectedgroup = optional_param('group', 1, PARAM_INT);
 
     if ($selectedgroup && !array_key_exists($selectedgroup, $allgroups)) {
         $selectedgroup = groups_get_course_group($course, true);
     }
 
     if ($allgroups) {
-        $groupoptions = [0 => get_string('allgroups', 'subjectattendance')];
         foreach ($allgroups as $gid => $g) {
             $groupoptions[$gid] = $g->name;
         }
+        $groupoptions[0] = get_string('allgroups', 'subjectattendance');
 
         if (version_compare($CFG->version, '2025050000', '>=')) {
             $marginclass = 'ms-2';
